@@ -3,6 +3,7 @@
     width: 22px;
     height: 19px;
     background-image: url("../../../images/like.svg");
+    background-repeat: no-repeat;
     border: none;
     background-color: #FFFFFF;
     cursor: pointer;
@@ -14,6 +15,6 @@
 }
 
 .elements__item-like:active {
-    background: #000000;
+    background-image: url("../../../images/active-like.svg");
 }
 
