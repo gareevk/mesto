@@ -10,6 +10,7 @@
     cursor: pointer;
     margin: 0;
     align-self: flex-end;
+    transition: opacity 0.1s linear;
 }
 
 @media screen and (max-width: 768px) {
@@ -17,4 +18,8 @@
         width: 18px;
         height: 18px;
     }
+}
+
+.profile__edit:hover {
+    opacity: 0.6;
 }
