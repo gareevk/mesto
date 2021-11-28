@@ -8,7 +8,7 @@
     margin-bottom: 40px;
 }
 
-@media screen and (max-width: 1307px) {
+@media screen and (max-width: 1024px) {
     .profile {
         margin-left: 27px;
         margin-right: 27px;
