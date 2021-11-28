@@ -25,7 +25,6 @@
 @import url(../blocks/profile/__add-button/profile__add-button.css);
 
 /*Elements*/
-@import url(../blocks/elements/elements.css);
 @import url(../blocks/elements/__gallery/elements__gallery.css);
 @import url(../blocks/elements/__item/elements__item.css);
 @import url(../blocks/elements/__item-image/elements__item-image.css);
