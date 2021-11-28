@@ -32,3 +32,6 @@
 @import url(../blocks/elements/__item-subheading/elements__item-subheading.css);
 @import url(../blocks/elements/__item-name/elements__item-name.css);
 @import url(../blocks/elements/__item-like/elements__item-like.css);
+
+/*Footer*/
+@import url(../blocks/footer/__copyright/footer__copyright.css);
