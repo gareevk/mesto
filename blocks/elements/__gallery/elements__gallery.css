@@ -12,3 +12,15 @@
     padding-top: 10px;
     justify-content: center;
 }
+
+@media screen and (max-width: 1020px) {
+    .elements__gallery {
+        margin: 0px 10px 40px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .elements__gallery {
+        margin: 0px 0px 40px;
+    }
+}
