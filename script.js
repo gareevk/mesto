@@ -9,6 +9,8 @@ let profileSubmit = popup.querySelector('.popup__container');
 
 function popupOpen() {
     popup.classList.add('popup_opened');
+    nameInput.value = profileName.textContent;
+    proInput.value = profileBio.textContent;
 }
 
 function popupClose() {
