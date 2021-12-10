@@ -89,6 +89,11 @@ function addCard(cardNameValue, cardLinkValue) {
   cardsElement.querySelector('.elements__item-image').src = cardLinkValue;
   cardsElement.querySelector('.elements__item-name').textContent = cardNameValue;
 
+  const cardLike = cardsElement.querySelector('.elements__item-like');
+  cardLike.addEventListener('click', function(evt) {
+    evt.target.classList.toggle('elements__item-like_active');
+  });
+
   cardsContainer.prepend(cardsElement);
 }
 
