@@ -94,11 +94,13 @@ function addCard(cardNameValue, cardLinkValue) {
     evt.target.classList.toggle('elements__item-like_active');
   });
 
-  cardsContainer.prepend(cardsElement);
-}
+  /*const cardsElement = cardsElement.querySelectorAll('.elements__item');*/
+  cardsElement.addEventListener('click', function(evt) {
+    console.log(evt);
+    evt.target.parentNode.remove(cardsElement);
+  }); 
 
-for (let i = initialCards.length - 1; i >= 0; i--) {
-  addCard(initialCards[i].name, initialCards[i].link);
+  cardsContainer.prepend(cardsElement);
 }
 
 buttonAddCard.addEventListener('click', cardPopupOpen);
@@ -110,3 +112,12 @@ buttonCloseCardPopup.addEventListener('click', cardPopupClose);
 function cardPopupClose() {
   popupAddCard.classList.remove('popup_opened');
 }
+
+/*Delete card*/
+
+
+/* Load initial cards*/
+for (let i = initialCards.length - 1; i >= 0; i--) {
+  addCard(initialCards[i].name, initialCards[i].link);
+}
+
