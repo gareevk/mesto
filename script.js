@@ -104,14 +104,18 @@ function addCard(cardNameValue, cardLinkValue) {
   cardOpen.addEventListener('click', function() {                              //Функция для открытия карточки на полный экран
     const card = document.querySelector('#card-popup');
     const cardImage = cardOpen.querySelector('.elements__item-image');
+    const cardDescription = document.querySelector('.elements__item-name');
     card.querySelector('.popup__card-fullscreen').src = cardImage.src;
     card.classList.add('popup_opened');
+    document.querySelector('.popup__description').textContent = cardDescription.textContent;
   });
 
   const cardClose = document.querySelector('#card-close');
   cardClose.addEventListener('click', function() {
     const card = document.querySelector('#card-popup');
+    
     card.classList.remove('popup_opened');
+    
   });
 
   cardsContainer.prepend(cardsElement); //добавление новой карточки в начало
