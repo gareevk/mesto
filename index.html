@@ -51,11 +51,18 @@
                     <button id="card-popup-close" class="popup__close-button" type="reset"></button>
                 </form>
             </section>
+            <section class="popup" id="card-popup">
+                <div class="popup__card-container">
+                    <img class="popup__card-fullscreen" src="#" alt="Карточка с изображением места">
+                    <button id="card-close" class="popup__close-button" type="reset"></button>
+                    <p class="popup__description"></p>
+                </div>
+            </section>
         </main>
     </div>
     <template id="elements__item-template">
         <li class="elements__item">
-            <img class="elements__item-image" src="#" alt="Карточка с изображением места">
+            <button class="elements__item-button"><img class="elements__item-image" src="#" alt="Карточка с изображением места"></button>
             <div class="elements__item-subheading">
                 <h2 class="elements__item-name">Место</h2>
                 <button class="elements__item-like" type="button"></button>
