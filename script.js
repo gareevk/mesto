@@ -101,13 +101,13 @@ function addCard(cardNameValue, cardLinkValue) {
   });
 
   const cardOpen = cardsElement.querySelector('.elements__item-button');
-  cardOpen.addEventListener('click', function() {                              //Функция для открытия карточки на полный экран
+  cardOpen.addEventListener('click', function(evt) {                              //Функция для открытия карточки на полный экран
     const card = document.querySelector('#card-popup');
     const cardImage = cardOpen.querySelector('.elements__item-image');
-    const cardDescription = document.querySelector('.elements__item-name');
     card.querySelector('.popup__card-fullscreen').src = cardImage.src;
     card.classList.add('popup_opened');
-    document.querySelector('.popup__description').textContent = cardDescription.textContent;
+    console.log(evt.target.parentNode.parentNode.querySelector('.elements__item-name').textContent);
+    document.querySelector('.popup__description').textContent = evt.target.parentNode.parentNode.querySelector('.elements__item-name').textContent;
   });
 
   const cardClose = document.querySelector('#card-close');
