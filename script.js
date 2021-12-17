@@ -18,6 +18,8 @@ const cardAddSubmit = popupAddCard.querySelector('#add-card-container');
 const cardsContainer = document.querySelector('.elements__gallery');
 
 const card = document.querySelector('#card-popup');
+const cardFullscreen = card.querySelector('.popup__card-fullscreen');
+const cardFullscreenDescription = card.querySelector('.popup__description');
 
 const cardTemplate = document.querySelector('#elements__item-template').content;
 
@@ -113,11 +115,12 @@ function createCard(cardNameValue, cardLinkValue) {
    const cardOpen = cardsElement.querySelector('.elements__item-button');
    const cardImage = cardsElement.querySelector('.elements__item-image');
    cardOpen.addEventListener('click', function(evt) {      //Функция для открытия карточки на полный экран
-    card.querySelector('.popup__card-fullscreen').src = cardImage.src;
-    card.querySelector('.popup__card-fullscreen').alt = cardImage.alt;
+    cardFullscreen.src = cardImage.src;
+    cardFullscreen.alt = cardImage.alt;
 
     openPopup(card);
-    document.querySelector('.popup__description').textContent = evt.target.parentNode.parentNode.querySelector('.elements__item-name').textContent;
+    console.log(evt.target.closest('.elements__item').querySelector('.elements__item-name'));
+    cardFullscreenDescription.textContent = evt.target.closest('.elements__item').querySelector('.elements__item-name').textContent;
   });
   
   return cardsElement;
@@ -134,7 +137,6 @@ function submitAddCard(evt) {
 cardAddSubmit.addEventListener('submit', submitAddCard);
 
 cardClose.addEventListener('click', function() {
-  const card = document.querySelector('#card-popup');
   closePopup(card);    
 });
 
@@ -167,7 +169,7 @@ cardLinkInput.addEventListener('focusin', () => {
 
 cardLinkInput.addEventListener('focusout', () => {
   if (cardLinkInput.value === '') {
-    cardLinkInput.value = 'Название';
+    cardLinkInput.value = 'Ссылка на картинку';
   };
 });
 
