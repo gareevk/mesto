@@ -55,7 +55,7 @@ const initialCards = [
 
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
-  clearValidation(popup);
+  //clearValidation(popup);
   document.removeEventListener('click', closePopupFocusLost);
   document.removeEventListener('keydown', closePopupEsc);
 }
@@ -64,7 +64,6 @@ function openPopup(popup) {
   popup.classList.add('popup_opened');
   document.addEventListener('click', closePopupFocusLost);
   document.addEventListener('keydown', closePopupEsc);
-  enableValidation();
 }
 
 /*close popup with Esc*/
@@ -72,6 +71,7 @@ function closePopupEsc(evt) {
   if (evt.key === 'Escape') {
     closePopup(popupProfile);
     closePopup(popupAddCard);
+    closePopup(card);
   }
 }
 
@@ -98,6 +98,7 @@ popupCloseButton.addEventListener('click', () => {
 //open edit profile popup
 function submitProfileEdit(evt) {
     evt.preventDefault();
+    console.log('ping');
     if (nameInput.value !== '') {
         profileName.textContent = nameInput.value;
         nameInput.setAttribute("value", nameInput.value);
@@ -128,15 +129,15 @@ function createCard(cardNameValue, cardLinkValue) {
     evt.target.classList.toggle('elements__item-like_active');
   });
 
-   //удаление карточки по нажатию на кнопку корзины
-   const buttonDeleteCard = cardsElement.querySelector('.elements__thrash-can');
+  //удаление карточки по нажатию на кнопку корзины
+  const buttonDeleteCard = cardsElement.querySelector('.elements__thrash-can');
    buttonDeleteCard.addEventListener('click', function(evt) {
      evt.target.closest('.elements__item').remove();
-   });
+  });
 
-   const cardOpen = cardsElement.querySelector('.elements__item-button');
-   const cardImage = cardsElement.querySelector('.elements__item-image');
-   cardOpen.addEventListener('click', function(evt) {      //Функция для открытия карточки на полный экран
+  const cardOpen = cardsElement.querySelector('.elements__item-button');
+  const cardImage = cardsElement.querySelector('.elements__item-image');
+  cardOpen.addEventListener('click', function(evt) {      //Функция для открытия карточки на полный экран
     cardFullscreen.src = cardImage.src;
     cardFullscreen.alt = cardImage.alt;
 
@@ -198,21 +199,4 @@ cardLinkInput.addEventListener('focusout', () => {
 /* Load initial cards*/
 for (let i = initialCards.length - 1; i >= 0; i--) {
   addCard(initialCards[i].name, initialCards[i].link);
-}
-
-/*Button*/
-const hasInvalidInput = (inputList) => {
-  return inputList.some((inputElement) => {
-    return !inputElement.validity.valid;
-  })
-}; 
-
-const toggleButtonState = (inputList, buttonElement) => {
-  if (hasInvalidInput(inputList)) {
-    buttonElement.classList.add('popup__save-button_disabled');
-    buttonElement.setAttribute('disabled', true);
-  } else {
-    buttonElement.classList.remove('popup__save-button_disabled');
-    buttonElement.setAttribute('disabled', false);
-  }
 }
