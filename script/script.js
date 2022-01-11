@@ -56,7 +56,7 @@ const initialCards = [
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
   //clearValidation(popup);
-  document.removeEventListener('click', closePopupFocusLost);
+  popup.removeEventListener('click', closePopupFocusLost);
   document.removeEventListener('keydown', closePopupEsc);
 }
 
@@ -69,9 +69,9 @@ function openPopup(popup) {
 /*close popup with Esc*/
 function closePopupEsc(evt) {
   if (evt.key === 'Escape') {
-    closePopup(popupProfile);
-    closePopup(popupAddCard);
-    closePopup(card);
+    const closestPopup = document.querySelector('.popup_opened');
+    console.log(closestPopup);
+    closePopup(closestPopup);
   }
 }
 
