@@ -55,10 +55,32 @@ const initialCards = [
 
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
+  clearValidation(popup);
+  document.removeEventListener('click', closePopupFocusLost);
+  document.removeEventListener('keydown', closePopupEsc);
 }
 
 function openPopup(popup) {
   popup.classList.add('popup_opened');
+  document.addEventListener('click', closePopupFocusLost);
+  document.addEventListener('keydown', closePopupEsc);
+  enableValidation();
+}
+
+/*close popup with Esc*/
+function closePopupEsc(evt) {
+  if (evt.key === 'Escape') {
+    closePopup(popupProfile);
+    closePopup(popupAddCard);
+  }
+}
+
+/*close popup with focus lost*/
+function closePopupFocusLost(evt) {
+  if (evt.target.classList.contains('popup')) {
+    const closestPopup = evt.target.closest('.popup');
+    closePopup(closestPopup);
+  }
 }
 
 function openProfilePopup() {
@@ -176,4 +198,21 @@ cardLinkInput.addEventListener('focusout', () => {
 /* Load initial cards*/
 for (let i = initialCards.length - 1; i >= 0; i--) {
   addCard(initialCards[i].name, initialCards[i].link);
+}
+
+/*Button*/
+const hasInvalidInput = (inputList) => {
+  return inputList.some((inputElement) => {
+    return !inputElement.validity.valid;
+  })
+}; 
+
+const toggleButtonState = (inputList, buttonElement) => {
+  if (hasInvalidInput(inputList)) {
+    buttonElement.classList.add('popup__save-button_disabled');
+    buttonElement.setAttribute('disabled', true);
+  } else {
+    buttonElement.classList.remove('popup__save-button_disabled');
+    buttonElement.setAttribute('disabled', false);
+  }
 }
