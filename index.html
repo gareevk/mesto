@@ -34,10 +34,12 @@
                 <h2 class="footer__copyright">© 2020 Mesto Russia</h2>
             </footer>
             <section class="popup" id="profile-popup">
-                <form class="popup__container" name="profilePopup">
+                <form class="popup__container" name="profilePopup" novalidate>
                     <h2 class="popup__heading">Редактировать профиль</h2>
-                    <input id="name-input" class="popup__input" type="text" name="name" required value="Жак-Ив Кусто">
-                    <input id="bio-input" class="popup__input" type="text" name="bio" value="Исследователь океана">
+                    <input id="name-input" class="popup__input" type="text" name="name" required value="Жак-Ив Кусто" minlength="2" maxlength="40">
+                    <span id="name-input-error" class="popup__input-error"></span>
+                    <input id="bio-input" class="popup__input" type="text" name="bio" required value="Исследователь океана" minlength="2" maxlength="200">
+                    <span id="bio-input-error" class="popup__input-error"></span>
                     <button class="popup__save-button" type="submit">Сохранить</button>
                     <button class="popup__close-button" type="reset"></button> 
                 </form>
@@ -45,8 +47,10 @@
             <section class="popup" id="add-card-popup">
                 <form id="add-card-container" class="popup__container" name="profilePopup">
                     <h2 class="popup__heading">Новое место</h2>
-                    <input id="card-name" class="popup__input" type="text" name="name" required minlength="2" maxlength="12" value="Название">
-                    <input id="card-link" class="popup__input" type="text" name="bio" required minlength="2" value="Ссылка на картинку">
+                    <input id="card-name" class="popup__input" type="text" name="name" required minlength="2" maxlength="30" value="Название">
+                    <span id="card-name-error" class="popup__input-error"></span>
+                    <input id="card-link" class="popup__input" type="url" name="bio" required minlength="2" value="Ссылка на картинку">
+                    <span id="card-link-error" class="popup__input-error"></span>
                     <button class="popup__save-button" type="submit">Создать</button>
                     <button id="card-popup-close" class="popup__close-button" type="reset"></button>
                 </form>
@@ -70,6 +74,7 @@
             <button class="elements__thrash-can" type="reset"></button>
         </li>
     </template>
-    <script src="script.js"></script>
+    <script src="script/script.js"></script>
+    <script src="script/validation.js"></script>
 </body>
 </html>
