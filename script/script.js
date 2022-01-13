@@ -62,7 +62,7 @@ function closePopup(popup) {
 
 function openPopup(popup) {
   popup.classList.add('popup_opened');
-  document.addEventListener('click', closePopupFocusLost);
+  popup.addEventListener('click', closePopupFocusLost);
   document.addEventListener('keydown', closePopupEsc);
 }
 
