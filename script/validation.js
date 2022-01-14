@@ -11,8 +11,8 @@ const validationConfig = {
 const hasInvalidInput = (inputList) => {
     return inputList.some((inputElement) => {
       return !inputElement.validity.valid;
-    })
-  }; 
+    });
+}; 
   
 const toggleButtonState = (inputList, buttonElement) => {
     if (hasInvalidInput(inputList)) {
@@ -24,7 +24,7 @@ const toggleButtonState = (inputList, buttonElement) => {
     }
 }
 
-/*profile form validation*/
+/*form validation*/
 const showInputError = (formElement, inputElement, errorMessage) => {
     const errorElement = formElement.querySelector(`#${inputElement.id}-error`);
     inputElement.classList.add(validationConfig.errorInput);
@@ -46,7 +46,6 @@ const checkInputValidity = (formElement, inputElement) => {
       hideInputError(formElement, inputElement);
     }
 };
-
 
 const setEventListeners = (formElement) => {
     const inputList = Array.from(formElement.querySelectorAll(validationConfig.popupInput));

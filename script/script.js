@@ -25,6 +25,8 @@ const cardTemplate = document.querySelector('#elements__item-template').content;
 
 const cardClose = document.querySelector('#card-close');
 
+const buttonElement = popupAddCard.querySelector('.popup__save-button');
+
 /* Initial Cards */
 const initialCards = [
   {
@@ -152,6 +154,8 @@ function createCard(cardNameValue, cardLinkValue) {
 function submitAddCard(evt) {
   evt.preventDefault();
   addCard(cardNameInput.value, cardLinkInput.value);
+  buttonElement.classList.add('popup__save-button_disabled');
+  buttonElement.setAttribute('disabled', true);
   closePopup(popupAddCard);
   cardLinkInput.value = 'Ссылка на картинку';
   cardNameInput.value = 'Название';
