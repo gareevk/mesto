@@ -1,4 +1,5 @@
-//import FormValidator from './validation.js'
+import FormValidator from './validation.js'
+import Card from './card.js'
 
 const popupProfile = document.querySelector('#profile-popup');
 const editProfile = document.querySelector('.profile__edit');
@@ -14,22 +15,23 @@ const buttonAddCard = document.querySelector('.profile__add-button');
 const buttonCloseCardPopup = popupAddCard.querySelector('#card-popup-close');
 const cardNameInput = popupAddCard.querySelector('#card-name');
 const cardLinkInput = popupAddCard.querySelector('#card-link');
-const cardName = document.querySelector('.elements__item-name');
-const cardImageLink = document.querySelector('.elements__item-image'); //used in Card class
 const cardAddSubmit = popupAddCard.querySelector('#add-card-container');
-const cardsContainer = document.querySelector('.elements__gallery');
-
-const card = document.querySelector('#card-popup'); //used in Card class
-const cardFullscreen = card.querySelector('.popup__card-fullscreen');
-const cardFullscreenDescription = card.querySelector('.popup__description');
-
-const cardTemplate = document.querySelector('#elements__item-template').content;
-
-const cardClose = document.querySelector('#card-close');
 
 const buttonElement = popupAddCard.querySelector('.popup__save-button');
 
-const cardLikeButton = document.querySelector('.elements__item-like');
+const validationConfig = {
+  saveButton: '.popup__save-button',
+  saveButtonDisabled: 'popup__save-button_disabled',
+  errorInput: 'popup__input_type_error',
+  errorActive: 'popup__input-error_active',
+  popupInput: '.popup__input',
+  popup: '.popup__container'
+}
+
+const profilePopupValidation = new FormValidator(validationConfig, popupProfile);
+const addCardPopupValidation = new FormValidator(validationConfig, popupAddCard);
+profilePopupValidation.enableValidation();
+addCardPopupValidation.enableValidation();
 
 /* Initial Cards */
 const initialCards = [
@@ -60,6 +62,7 @@ const initialCards = [
 ];
 
 /* Card parent class to generate new places cards*/
+/*
 class Card {
   constructor (card) {
     this._name = card.name;
@@ -141,10 +144,10 @@ class Card {
     });
   }
 }
+*/
 
 /* загрузка карточек на страницу через класс Card */
 initialCards.forEach((item) => {
-  console.log('hola');
   addCard(item);
 });
 
@@ -258,23 +261,6 @@ cardLinkInput.addEventListener('focusout', () => {
     cardLinkInput.value = 'Ссылка на картинку';
   };
 });
-
-
-
-const validationConfig = {
-  saveButton: '.popup__save-button',
-  saveButtonDisabled: 'popup__save-button_disabled',
-  errorInput: 'popup__input_type_error',
-  errorActive: 'popup__input-error_active',
-  popupInput: '.popup__input',
-  popup: '.popup__container'
-}
-
-const profilePopupValidation = new FormValidator(validationConfig, popupProfile);
-const addCardPopupValidation = new FormValidator(validationConfig, popupAddCard);
-profilePopupValidation.enableValidation();
-addCardPopupValidation.enableValidation();
-
 
 /* Load initial cards
 for (let i = initialCards.length - 1; i >= 0; i--) {
