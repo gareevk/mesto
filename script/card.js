@@ -4,15 +4,15 @@ const cardFullscreen = card.querySelector('.popup__card-fullscreen');
 const cardFullscreenDescription = card.querySelector('.popup__description');
 
 class Card {
-    constructor (card) {
+    constructor (card, templateSelector) {
       this._name = card.name;
       this._image = card.link;
-      //this._isLiked = false;
+      this._template = templateSelector;
     }
   
     _getTemplate() {
       const cardElement = document
-        .querySelector('#elements__item-template')
+        .querySelector(this._template) //'#elements__item-template'
         .content
         .querySelector('.elements__item')
         .cloneNode(true);
@@ -32,7 +32,6 @@ class Card {
     }
   
     _like() {
-      //this._isLiked = !this._isLiked;
       this._element.querySelector('.elements__item-like').classList.toggle('elements__item-like_active');
     }
   
@@ -61,9 +60,6 @@ class Card {
     _handleClosePopup() {
       card.classList.remove('popup_opened');
       cardFullscreenDescription.textContent = '';
-      //cardFullscreen.src = '';
-      //this._element.removeEventListener('keydown');
-      //this._element.removeEventListener('click');
     }
   
     _setEventListeners() {
