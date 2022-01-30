@@ -61,11 +61,6 @@ const initialCards = [
   }
 ];
 
-/* загрузка карточек на страницу через класс Card */
-initialCards.forEach((item) => {
-  addCard(item, '#elements__item-template');
-});
-
 function addCard(newCard, template) {
   if (!template) {
     template = '#elements__item-template'; 
@@ -75,7 +70,7 @@ function addCard(newCard, template) {
   document.querySelector('.elements__gallery').prepend(cardElement);
 }
 
-function submitAddCard(evt) {
+function submitAddCardForm(evt) {
   evt.preventDefault();
   const newCard =
     {
@@ -86,8 +81,6 @@ function submitAddCard(evt) {
   buttonElement.classList.add('popup__save-button_disabled');
   buttonElement.setAttribute('disabled', true);
   closePopup(popupAddCard);
-  cardLinkInput.value = 'Ссылка на картинку';
-  cardNameInput.value = 'Название';
 }
 
 function closePopup(popup) {
@@ -124,25 +117,19 @@ function openProfilePopup() {
   proInput.value = profileBio.textContent;
 }
 
+//open edit profile popup
+function submitProfileEdit(evt) {
+    evt.preventDefault();
+    profileName.textContent = nameInput.value;
+    profileBio.textContent = proInput.value;
+    closePopup(popupProfile);
+}
+
 editProfile.addEventListener('click', openProfilePopup);
 
 popupCloseButton.addEventListener('click', () => {
   closePopup(popupProfile);
 });
-
-//open edit profile popup
-function submitProfileEdit(evt) {
-    evt.preventDefault();
-    if (nameInput.value !== '') {
-        profileName.textContent = nameInput.value;
-        nameInput.setAttribute("value", nameInput.value);
-    }
-    if (proInput.value !== '') {
-        profileBio.textContent = proInput.value;
-        proInput.setAttribute("value", proInput.value);
-    }
-    closePopup(popupProfile);
-}
 
 profileSubmit.addEventListener('submit', submitProfileEdit); 
 
@@ -151,13 +138,13 @@ buttonCloseCardPopup.addEventListener('click', () => {
   closePopup(popupAddCard);
 });
 
-
-cardAddSubmit.addEventListener('submit', submitAddCard);
+cardAddSubmit.addEventListener('submit', submitAddCardForm);
 
 buttonAddCard.addEventListener('click', () => {
   openPopup(popupAddCard);
 });
 
+/*
 cardNameInput.addEventListener('focusin', () => {
   cardNameInput.value = '';
 });
@@ -167,6 +154,7 @@ cardNameInput.addEventListener('focusout', () => {
     cardNameInput.value = 'Название';
   };
 });
+*/
 
 cardLinkInput.addEventListener('focusin', () => {
   cardLinkInput.value = '';
@@ -177,3 +165,10 @@ cardLinkInput.addEventListener('focusout', () => {
     cardLinkInput.value = 'Ссылка на картинку';
   };
 });
+
+/* загрузка карточек на страницу через класс Card */
+initialCards.forEach((item) => {
+  addCard(item, '#elements__item-template');
+});
+
+export {openPopup, closePopup};
