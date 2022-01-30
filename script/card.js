@@ -1,18 +1,21 @@
+import { openPopup, closePopup } from "./index.js";
+
 const cardClose = document.querySelector('#card-close');
 const card = document.querySelector('#card-popup');
 const cardFullscreen = card.querySelector('.popup__card-fullscreen');
 const cardFullscreenDescription = card.querySelector('.popup__description');
+const popupCard = document.querySelector('#card-popup');
 
 class Card {
-    constructor (card) {
+    constructor (card, templateSelector) {
       this._name = card.name;
       this._image = card.link;
-      //this._isLiked = false;
+      this._template = templateSelector;
     }
   
     _getTemplate() {
       const cardElement = document
-        .querySelector('#elements__item-template')
+        .querySelector(this._template) //'#elements__item-template'
         .content
         .querySelector('.elements__item')
         .cloneNode(true);
@@ -32,7 +35,6 @@ class Card {
     }
   
     _like() {
-      //this._isLiked = !this._isLiked;
       this._element.querySelector('.elements__item-like').classList.toggle('elements__item-like_active');
     }
   
@@ -43,27 +45,8 @@ class Card {
     _handleOpenPopup() {
       cardFullscreen.src = this._image;
       cardFullscreenDescription.textContent = this._name;
-      card.classList.add('popup_opened');
-      
-      this._element.addEventListener('keydown', (evt) => {  //how to remove this eventListeners after?
-        if (evt.key === 'Escape') {
-          this._handleClosePopup();
-        }
-      });
-  
-      card.addEventListener('click', (evt) => {
-        if (!evt.target.classList.contains('.popup')) {
-          this._handleClosePopup();
-        }
-      });
-    }
-  
-    _handleClosePopup() {
-      card.classList.remove('popup_opened');
-      cardFullscreenDescription.textContent = '';
-      //cardFullscreen.src = '';
-      //this._element.removeEventListener('keydown');
-      //this._element.removeEventListener('click');
+
+      openPopup(popupCard);
     }
   
     _setEventListeners() {
@@ -72,7 +55,7 @@ class Card {
       });
       
       cardClose.addEventListener('click', () => {  //popup closing
-        this._handleClosePopup();
+        closePopup(popupCard);
       });
   
       this._element.querySelector('.elements__item-like').addEventListener('click', () => {  //card like

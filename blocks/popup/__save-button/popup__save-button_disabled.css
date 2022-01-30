@@ -2,5 +2,6 @@
     background: white;
     color: black;
     border: 1px solid #000000;
-    box-sizing: border-box; 
+    box-sizing: border-box;
+    cursor: default;
 }
