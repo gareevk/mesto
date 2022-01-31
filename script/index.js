@@ -1,5 +1,5 @@
 import FormValidator from './FormValidator.js'
-import Card from './Card.js'
+import Card from './Сard.js'
 
 const popupProfile = document.querySelector('#profile-popup');
 const editProfile = document.querySelector('.profile__edit');
@@ -18,6 +18,8 @@ const cardLinkInput = popupAddCard.querySelector('#card-link');
 const cardAddSubmit = popupAddCard.querySelector('#add-card-container');
 
 const buttonElement = popupAddCard.querySelector('.popup__save-button');
+
+const cardTemplateSelector = '#elements__item-template';
 
 const validationConfig = {
   saveButton: '.popup__save-button',
@@ -61,11 +63,8 @@ const initialCards = [
   }
 ];
 
-function addCard(newCard, template) {
-  if (!template) {
-    template = '#elements__item-template'; 
-  }
-  const card = new Card(newCard, template);  
+function addCard(newCard) {
+  const card = new Card(newCard, cardTemplateSelector);  
   const cardElement = card.generateCard();
   document.querySelector('.elements__gallery').prepend(cardElement);
 }
@@ -77,10 +76,11 @@ function submitAddCardForm(evt) {
       name: cardNameInput.value,
       link: cardLinkInput.value
     }
-  addCard(newCard, '#elements__item-template');  
+  addCard(newCard, cardTemplateSelector);  
   buttonElement.classList.add('popup__save-button_disabled');
   buttonElement.setAttribute('disabled', true);
   closePopup(popupAddCard);
+  cardAddSubmit.reset();
 }
 
 function closePopup(popup) {
@@ -142,28 +142,6 @@ cardAddSubmit.addEventListener('submit', submitAddCardForm);
 
 buttonAddCard.addEventListener('click', () => {
   openPopup(popupAddCard);
-});
-
-/*
-cardNameInput.addEventListener('focusin', () => {
-  cardNameInput.value = '';
-});
-
-cardNameInput.addEventListener('focusout', () => {
-  if (cardNameInput.value === '') {
-    cardNameInput.value = 'Название';
-  };
-});
-*/
-
-cardLinkInput.addEventListener('focusin', () => {
-  cardLinkInput.value = '';
-});
-
-cardLinkInput.addEventListener('focusout', () => {
-  if (cardLinkInput.value === '') {
-    cardLinkInput.value = 'Ссылка на картинку';
-  };
 });
 
 /* загрузка карточек на страницу через класс Card */
