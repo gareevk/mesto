@@ -15,7 +15,7 @@ class Card {
   
     _getTemplate() {
       const cardElement = document
-        .querySelector(this._template) //'#elements__item-template'
+        .querySelector(this._template)
         .content
         .querySelector('.elements__item')
         .cloneNode(true);
@@ -50,7 +50,7 @@ class Card {
     }
   
     _setEventListeners() {
-      this._element.querySelector('.elements__item-image').addEventListener('click', () => {  //popup opening
+      this._element.querySelector('.elements__item-image').addEventListener('click', () => {             //popup opening
         this._handleOpenPopup();
       });
       
