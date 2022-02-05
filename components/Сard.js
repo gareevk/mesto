@@ -1,4 +1,4 @@
-import { openPopup, closePopup } from "./index.js";
+import { openPopup, closePopup } from '../pages/index.js';
 
 const cardClose = document.querySelector('#card-close');
 const card = document.querySelector('#card-popup');
@@ -6,7 +6,7 @@ const cardFullscreen = card.querySelector('.popup__card-fullscreen');
 const cardFullscreenDescription = card.querySelector('.popup__description');
 const popupCard = document.querySelector('#card-popup');
 
-class Card {
+export default class Card {
     constructor (card, templateSelector) {
       this._name = card.name;
       this._image = card.link;
@@ -67,5 +67,3 @@ class Card {
       });
     }
   }
-
-  export default Card;
