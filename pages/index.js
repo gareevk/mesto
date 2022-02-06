@@ -24,6 +24,7 @@ import {
   profilePopupValidation,
   addCardPopupValidation
 } from '../utils/constants.js';
+import PopupWithImage from '../components/PopupWithImage.js';
 
 profilePopupValidation.enableValidation();
 addCardPopupValidation.enableValidation();
@@ -43,12 +44,13 @@ function submitAddCardForm(evt) {
   closePopup(popupAddCard);
   cardAddSubmit.reset();
 }
-
+/*
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
   popup.removeEventListener('click', closePopupFocusLost);
   document.removeEventListener('keydown', closePopupEsc);
 }
+*/
 
 function openPopup(popup) {
   popup.classList.add('popup_opened');
@@ -65,18 +67,22 @@ function closePopupEsc(evt) {
 }
 
 /*close popup with focus lost*/
+
+/*
 function closePopupFocusLost(evt) {
   if (evt.target.classList.contains('popup')) {
     const closestPopup = evt.target.closest('.popup');
     closePopup(closestPopup);
   }
 }
+*/
 
 function openProfilePopup() {
   openPopup(popupProfile);
   nameInput.value = profileName.textContent;
   proInput.value = profileBio.textContent;
 }
+
 
 //open edit profile popup
 function submitProfileEdit(evt) {
@@ -113,23 +119,25 @@ initialCards.forEach((item) => {
 });
 */
 
-/*
+
 function addCard(newCard) {
   const card = new Card(newCard, cardTemplateSelector);  
   const cardElement = card.generateCard();
   document.querySelector('.elements__gallery').prepend(cardElement);
 }
-*/
 
-const addCard = new Section( {
+const initialCard = new Section( {
   items: initialCards,
   renderer: (newCard) => {
-    const card = new Card(newCard, cardTemplateSelector);
+    const card = new Card(newCard, cardTemplateSelector, () => {
+      const cardImagePopup = new PopupWithImage('#card-popup');
+      cardImagePopup.open(newCard);
+    });
     const cardElement = card.generateCard();
-    addCard.addItem(cardElement);
+    initialCard.addItem(cardElement);
   }
 } , '.elements__gallery');
 
-addCard.renderItems();
+initialCard.renderItems();
 
-export {openPopup, closePopup};
+// export {openPopup, closePopup};
