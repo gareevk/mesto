@@ -1,5 +1,5 @@
 import Popup from "./Popup.js";
-import { cardAddSubmit } from "../utils/constants.js";
+import { cardAddSubmit , profileSubmit } from "../utils/constants.js";
 
 export default class PopupWithForm extends Popup {
     constructor(popupSelector, formSubmit) {
@@ -8,11 +8,8 @@ export default class PopupWithForm extends Popup {
     }
 
     _getInputValues() {
-        const form = this._popup.querySelector('#add-card-container');
-        const formInput = {
-            cardName: form.querySelector('#card-name').value,
-            cardLink: form.querySelector('#card-link').value
-        }
+        const form = Array.from(this._popup.querySelectorAll('.popup__input'));
+        const formInput = [form[0].value, form[1].value];
         this._formSubmit(formInput);
     }
 
@@ -20,12 +17,18 @@ export default class PopupWithForm extends Popup {
         super.setEventListeners();
         cardAddSubmit.addEventListener('submit', () => {
             this._getInputValues(); 
-        } , {once: true});
+        } , {once: true });
+        profileSubmit.addEventListener('submit', () => {
+            this._getInputValues();
+        } , { once: true } );
+
     }
 
     close() {
         super.close();
         cardAddSubmit.reset();
+        profileSubmit.reset();
+        this._formSubmit = '';
     }
 }
 

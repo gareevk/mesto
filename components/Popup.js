@@ -28,13 +28,13 @@ export default class Popup {
     setEventListeners() {
         this._popupCloseButton.addEventListener( 'click', (evt) => {
             this.close(evt); 
-        });
+        } , {once: true } );
         this._popup.addEventListener('click', (evt) => {
             this._handleFocusLost(evt);
-        } );
+        } , {once: true } );
         document.addEventListener('keydown', (evt) => {
             this._handleEscClose(evt);
-        }   );
+        } , {once: true } );
     }
 }
 
