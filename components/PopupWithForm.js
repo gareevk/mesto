@@ -8,15 +8,19 @@ export default class PopupWithForm extends Popup {
     }
 
     _getInputValues() {
-        const formInput = this._popup.querySelectorAll('.popup__input').value;
-            //name: this._popup.querySelector('#card-name').value,
-            //link: this._popup.querySelector('#card-link').value
+        const form = this._popup.querySelector('#add-card-container');
+        const formInput = {
+            cardName: form.querySelector('#card-name').value,
+            cardLink: form.querySelector('#card-link').value
+        }
         this._formSubmit(formInput);
     }
 
     setEventListeners() {
         super.setEventListeners();
-        cardAddSubmit.addEventListener('submit', this._getInputValues);
+        cardAddSubmit.addEventListener('submit', () => {
+            this._getInputValues(); 
+        } , {once: true});
     }
 
     close() {

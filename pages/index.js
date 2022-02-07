@@ -25,12 +25,13 @@ import {
   addCardPopupValidation
 } from '../utils/constants.js';
 import PopupWithImage from '../components/PopupWithImage.js';
+import PopupWithForm from '../components/PopupWithForm.js';
 
 profilePopupValidation.enableValidation();
-addCardPopupValidation.enableValidation();
 
+//addCardPopupValidation.enableValidation();
 
-
+/*
 function submitAddCardForm(evt) {
   evt.preventDefault();
   const newCard =
@@ -44,6 +45,7 @@ function submitAddCardForm(evt) {
   closePopup(popupAddCard);
   cardAddSubmit.reset();
 }
+*/
 /*
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
@@ -105,26 +107,41 @@ buttonCloseCardPopup.addEventListener('click', () => {
   closePopup(popupAddCard);
 });
 
-cardAddSubmit.addEventListener('submit', submitAddCardForm);
-
-buttonAddCard.addEventListener('click', () => {
-  openPopup(popupAddCard);
-});
-
-/* загрузка карточек на страницу через класс Card */
-
-/*
-initialCards.forEach((item) => {
-  addCard(item, '#elements__item-template');
-});
-*/
-
+//cardAddSubmit.addEventListener('submit', submitAddCardForm);
 
 function addCard(newCard) {
   const card = new Card(newCard, cardTemplateSelector);  
   const cardElement = card.generateCard();
   document.querySelector('.elements__gallery').prepend(cardElement);
 }
+
+buttonAddCard.addEventListener('click', () => {
+  addCardPopupValidation.enableValidation();
+  const addCardPopup = new PopupWithForm( '#add-card-popup', (formInput) => {
+    const newCard = [{
+        name: formInput.cardName,
+        link: formInput.cardLink
+    }]
+    const addNewCard = new Section( {
+      items: newCard,
+      renderer:  (item) => {
+          const card = new Card(item, cardTemplateSelector, () => {
+            const cardImagePopup = new PopupWithImage('#card-popup');
+            cardImagePopup.open(item);
+          });
+          const cardElement = card.generateCard();
+          addNewCard.addItem(cardElement);
+      }
+    },
+    '.elements__gallery');
+    addNewCard.renderItems();
+    addCardPopup.close();
+  }
+  
+  //submitPopupAddCard 
+  );
+  addCardPopup.open();
+} );
 
 const initialCard = new Section( {
   items: initialCards,
