@@ -1,24 +1,13 @@
+import './index.css';
 import Card from '../components/Сard.js';
 import Section from '../components/Section.js';
 import UserInfo from '../components/UserInfo.js';
 
 import {
-  initialCards,
-  popupProfile,
   editProfile,
-  popupCloseButton,
   nameInput,
   proInput,
-  profileName,
-  profileBio,
-  profileSubmit,
-  popupAddCard,
   buttonAddCard,
-  buttonCloseCardPopup,
-  cardNameInput,
-  cardLinkInput,
-  cardAddSubmit,
-  buttonElement,
   cardTemplateSelector,
   profilePopupValidation,
   addCardPopupValidation
@@ -62,6 +51,7 @@ buttonAddCard.addEventListener('click', () => {
     '.elements__gallery');
     addNewCard.renderItems();
     addCardPopup.close();
+    formInput = '';
   } );
   addCardPopup.open();
 } );
