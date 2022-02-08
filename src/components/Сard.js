@@ -1,4 +1,4 @@
-import { openPopup, closePopup } from "./index.js";
+// import { openPopup, closePopup } from '../pages/index.js';
 
 const cardClose = document.querySelector('#card-close');
 const card = document.querySelector('#card-popup');
@@ -6,11 +6,12 @@ const cardFullscreen = card.querySelector('.popup__card-fullscreen');
 const cardFullscreenDescription = card.querySelector('.popup__description');
 const popupCard = document.querySelector('#card-popup');
 
-class Card {
-    constructor (card, templateSelector) {
+export default class Card {
+    constructor (card , templateSelector, handleCardClick) {
       this._name = card.name;
       this._image = card.link;
       this._template = templateSelector;
+      this._handleCardClick = handleCardClick;
     }
   
     _getTemplate() {
@@ -41,6 +42,8 @@ class Card {
     _deleteCard() {
       this._element.remove();
     }
+
+    /*
   
     _handleOpenPopup() {
       cardFullscreen.src = this._image;
@@ -48,15 +51,20 @@ class Card {
 
       openPopup(popupCard);
     }
+    */
   
     _setEventListeners() {
       this._element.querySelector('.elements__item-image').addEventListener('click', () => {             //popup opening
-        this._handleOpenPopup();
+        //this._handleOpenPopup();
+        this._handleCardClick();
       });
+
+      /*
       
       cardClose.addEventListener('click', () => {  //popup closing
         closePopup(popupCard);
       });
+      */
   
       this._element.querySelector('.elements__item-like').addEventListener('click', () => {  //card like
         this._like();
@@ -67,5 +75,3 @@ class Card {
       });
     }
   }
-
-  export default Card;
