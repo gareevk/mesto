@@ -44,14 +44,12 @@ const nameInput = popupProfile.querySelector('#name-input');
 const proInput = popupProfile.querySelector('#bio-input');
 const profileName = document.querySelector('.profile__name');
 const profileBio = document.querySelector('.profile__description');
-const profileSubmit = popupProfile.querySelector('.popup__container');
 
 const popupAddCard = document.querySelector('#add-card-popup');
 const buttonAddCard = document.querySelector('.profile__add-button');
 const buttonCloseCardPopup = popupAddCard.querySelector('#card-popup-close');
 const cardNameInput = popupAddCard.querySelector('#card-name');
 const cardLinkInput = popupAddCard.querySelector('#card-link');
-const cardAddSubmit = popupAddCard.querySelector('#add-card-container');
 
 const buttonElement = popupAddCard.querySelector('.popup__save-button');
 
@@ -70,13 +68,11 @@ export {
     proInput,
     profileName,
     profileBio,
-    profileSubmit,
     popupAddCard,
     buttonAddCard,
     buttonCloseCardPopup,
     cardNameInput,
     cardLinkInput,
-    cardAddSubmit,
     buttonElement,
     cardTemplateSelector,
     addCardPopupValidation,

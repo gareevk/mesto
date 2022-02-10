@@ -10,18 +10,35 @@ import {
   buttonAddCard,
   cardTemplateSelector,
   profilePopupValidation,
-  addCardPopupValidation
+  addCardPopupValidation,
+  initialCards
 } from '../utils/constants.js';
-
-import initialCard from '../utils/utils.js'; 
 
 import PopupWithImage from '../components/PopupWithImage.js';
 import PopupWithForm from '../components/PopupWithForm.js';
 
+function addNewCard(newCard, newSection) {
+  const card = new Card(newCard, cardTemplateSelector, () => {
+    const cardImagePopup = new PopupWithImage('#card-popup');
+    cardImagePopup.open(newCard);
+  });
+  const cardElement = card.generateCard();
+  console.log(newSection);
+  newSection.addItem(cardElement);
+}
+
+const initialCardSections = new Section( {
+  items: initialCards,
+  renderer: (initialCard) => {
+    addNewCard( initialCard, initialCardSections);
+  }
+} , '.elements__gallery');
+
+const profile = new UserInfo( '.profile__name', '.profile__description' );
+
 editProfile.addEventListener('click', () => {
   profilePopupValidation.enableValidation();
-  const profilePopup = new PopupWithForm( '#profile-popup', (formInput) => {
-    const profile = new UserInfo( '.profile__name', '.profile__description' );
+  const profilePopup = new PopupWithForm( '#profile-popup', (formInput) => { 
     profile.setUserInfo(formInput);
     profilePopup.close();
     nameInput.value = profile.getUserInfo().name;
@@ -34,26 +51,20 @@ buttonAddCard.addEventListener('click', () => {
   addCardPopupValidation.enableValidation();
   const addCardPopup = new PopupWithForm( '#add-card-popup', (formInput) => {
     const newCard = [{
-        name: formInput[0],
-        link: formInput[1]
+        name: formInput.name,
+        link: formInput.link
     }];
-    const addNewCard = new Section( {
+    const addNewCards = new Section( {
       items: newCard,
       renderer:  (item) => {
-          const card = new Card(item, cardTemplateSelector, () => {
-            const cardImagePopup = new PopupWithImage('#card-popup');
-            cardImagePopup.open(item);
-          });
-          const cardElement = card.generateCard();
-          addNewCard.addItem(cardElement);
+        addNewCard(item, addNewCards);
       }
     },
     '.elements__gallery');
-    addNewCard.renderItems();
+    addNewCards.renderItems();
     addCardPopup.close();
-    formInput = '';
   } );
   addCardPopup.open();
 } );
 
-initialCard.renderItems();
+initialCardSections.renderItems();
