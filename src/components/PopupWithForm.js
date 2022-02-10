@@ -1,24 +1,29 @@
 import Popup from "./Popup.js";
-import { cardAddSubmit , profileSubmit } from "../utils/constants.js";
 
 export default class PopupWithForm extends Popup {
     constructor(popupSelector, formSubmit) {
         super(popupSelector);
         this._formSubmit = formSubmit;
+        this._cardAddSubmit = document.querySelector('#add-card-container');
+        this._profileSubmit = document.querySelector('.popup__container');
     }
 
     _getInputValues() {
-        const form = Array.from(this._popup.querySelectorAll('.popup__input'));
-        const formInput = [form[0].value, form[1].value];
-        this._formSubmit(formInput);
+        this._inputList = this._popup.querySelectorAll('.popup__input');
+        this._formValues = {};
+        this._inputList.forEach( (input) => {
+            this._formValues[input.name] = input.value;
+            console.log(this._formValues);  
+        });
+        this._formSubmit(this._formValues);
     }
 
     setEventListeners() {
         super.setEventListeners();
-        cardAddSubmit.addEventListener('submit', () => {
+        this._cardAddSubmit.addEventListener('submit', () => {
             this._getInputValues(); 
         } , {once: true });
-        profileSubmit.addEventListener('submit', () => {
+        this._profileSubmit.addEventListener('submit', () => {
             this._getInputValues();
         } , { once: true } );
 
@@ -26,8 +31,7 @@ export default class PopupWithForm extends Popup {
 
     close() {
         super.close();
-        cardAddSubmit.reset();
-        profileSubmit.reset();
-        this._formSubmit = '';
+        this._cardAddSubmit.reset();
+        this._profileSubmit.reset();
     }
 }
