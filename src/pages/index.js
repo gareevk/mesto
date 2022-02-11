@@ -17,13 +17,13 @@ import {
 import PopupWithImage from '../components/PopupWithImage.js';
 import PopupWithForm from '../components/PopupWithForm.js';
 
+const cardImagePopup = new PopupWithImage('#card-popup');
+
 function addNewCard(newCard, newSection) {
   const card = new Card(newCard, cardTemplateSelector, () => {
-    const cardImagePopup = new PopupWithImage('#card-popup');
     cardImagePopup.open(newCard);
   });
   const cardElement = card.generateCard();
-  console.log(newSection);
   newSection.addItem(cardElement);
 }
 
@@ -36,35 +36,45 @@ const initialCardSections = new Section( {
 
 const profile = new UserInfo( '.profile__name', '.profile__description' );
 
-editProfile.addEventListener('click', () => {
-  profilePopupValidation.enableValidation();
-  const profilePopup = new PopupWithForm( '#profile-popup', (formInput) => { 
-    profile.setUserInfo(formInput);
-    profilePopup.close();
-    nameInput.value = profile.getUserInfo().name;
-    proInput.value = profile.getUserInfo().info;
-  } );
-  profilePopup.open();
+const profilePopup = new PopupWithForm( '#profile-popup', (formInput) => {
+  profile.setUserInfo(formInput);
+  profilePopup.close();
+  nameInput.value = profile.getUserInfo().name;
+  proInput.value = profile.getUserInfo().info;
 } );
+
+
+const addCardPopup = new PopupWithForm( '#add-card-popup', (formInput) => {
+  const newCard = [{
+      name: formInput.name,
+      link: formInput.link
+  }];
+  const addNewCards = new Section( {
+    items: newCard,
+    renderer:  (item) => {
+      addNewCard(item, addNewCards);
+    }
+  },
+  '.elements__gallery');
+  addNewCards.renderItems();
+  addCardPopup.close();
+} );
+
 
 buttonAddCard.addEventListener('click', () => {
   addCardPopupValidation.enableValidation();
-  const addCardPopup = new PopupWithForm( '#add-card-popup', (formInput) => {
-    const newCard = [{
-        name: formInput.name,
-        link: formInput.link
-    }];
-    const addNewCards = new Section( {
-      items: newCard,
-      renderer:  (item) => {
-        addNewCard(item, addNewCards);
-      }
-    },
-    '.elements__gallery');
-    addNewCards.renderItems();
-    addCardPopup.close();
-  } );
   addCardPopup.open();
 } );
+
+editProfile.addEventListener('click', () => {
+  profilePopupValidation.enableValidation();
+  profilePopup.open();
+} );
+
+profilePopup.setEventListeners();
+
+addCardPopup.setEventListeners();
+
+cardImagePopup.setEventListeners();
 
 initialCardSections.renderItems();
