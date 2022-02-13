@@ -1,3 +1,5 @@
+import { thistle } from "color-name";
+
 export default class Popup {
     constructor(popupSelector) {
         this._popup = document.querySelector(popupSelector);
@@ -6,29 +8,20 @@ export default class Popup {
 
     open() {
         this._popup.classList.add('popup_opened');
-        this._handleEscClose(true);
+        console.log(this);
+        document.addEventListener('keydown', this._handleEscClose);
     }
 
     close() {
         this._popup.classList.remove('popup_opened');
-        this._handleEscClose(false);
+        console.log(this);
+        document.removeEventListener('keydown', this._handleEscClose);
     }
 
-    _handleEscClose(condition) {
-        if (condition) {
-            document.addEventListener('keydown', (evt) => {
-                if (evt.key === 'Escape') {
-                    this.close(evt);
-                } 
-            });
-
-        } else {
-            document.removeEventListener('keydown', (evt) => {
-                if (evt.key === 'Escape') {
-                    this.close(evt);
-                } 
-            });
-        }
+    _handleEscClose = (evt) => {
+        if (evt.key === 'Escape') {
+            this.close();
+        } 
     }
 
     _handleFocusLost(evt) {
