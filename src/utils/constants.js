@@ -44,6 +44,7 @@ const nameInput = popupProfile.querySelector('#name-input');
 const proInput = popupProfile.querySelector('#bio-input');
 const profileName = document.querySelector('.profile__name');
 const profileBio = document.querySelector('.profile__description');
+const profileAvatar = document.querySelector('.profile__avatar');
 
 const popupAddCard = document.querySelector('#add-card-popup');
 const buttonAddCard = document.querySelector('.profile__add-button');
@@ -73,5 +74,6 @@ export {
     cardLinkInput,
     cardTemplateSelector,
     addCardPopupValidation,
-    profilePopupValidation
+    profilePopupValidation,
+    profileAvatar
 };
