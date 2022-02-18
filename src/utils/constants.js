@@ -52,7 +52,7 @@ const buttonCloseCardPopup = popupAddCard.querySelector('#card-popup-close');
 const cardNameInput = popupAddCard.querySelector('#card-name');
 const cardLinkInput = popupAddCard.querySelector('#card-link');
 
-const cardTemplateSelector = '#elements__item-template';
+const cardTemplateSelector = '#elements__added-item-template';
 
 const profilePopupValidation = new FormValidator(validationConfig, popupProfile);
 const addCardPopupValidation = new FormValidator(validationConfig, popupAddCard);

@@ -62,6 +62,13 @@
                     <p class="popup__description"></p>
                 </div>
             </section>
+            <section class="popup" id="delete-card-popup">
+                <div class="popup__delete-card">
+                    <p class="popup__delete-confirm">Вы уверены?</p>
+                    <button class="popup__save-button" type="submit">Да</button>
+                    <button id="card-close" class="popup__close-button" type="reset"></button>
+                </div>
+            </section>
         </main>
     </div>
     <template id="elements__item-template">
@@ -69,7 +76,10 @@
             <button class="elements__item-button"><img class="elements__item-image" src="#" alt="Карточка с изображением места"></button>
             <div class="elements__item-subheading">
                 <h2 class="elements__item-name">Место</h2>
-                <button class="elements__item-like" type="button"></button>
+                <div class="elements__like">
+                    <button class="elements__item-like" type="button"></button>
+                    <p class="elements__like-counter">0</p>
+                </div>
             </div>
             <button class="elements__thrash-can" type="reset"></button>
         </li>
