@@ -43,16 +43,19 @@ export default class Card {
       return this._element;
     }
 
-    _deleteCard() {
-      console.log(this._cardId);
-      this._deleteCard(this._cardId);
-      //this._element.remove();
+    deleteCard() {
+      this._element.remove();
+    }
+
+    like() {
+      this._element.querySelector('.elements__item-like').classList.toggle('elements__item-like_active');
     }
   
-    _like() {
+    _likeHandler() {
       this._isLiked = !this._isLiked;
-      this._element.querySelector('.elements__item-like').classList.toggle('elements__item-like_active');
-      if (this._isliked) {
+      console.log(this._isLiked);
+      this.like();
+      if (this._isLiked) {
         fetch(`https://mesto.nomoreparties.co/v1/cohort36/cards/${this._cardId}/likes`, {
           method: 'PUT',
           headers: {
@@ -60,7 +63,10 @@ export default class Card {
           }
         })
         .then( (res) => res.json() )
-        .then( (like) => console.log(like) )
+        .then( (like) => {
+          this._element.querySelector('.elements__like-counter').textContent = like.likes.length;
+          console.log(like)
+        } )
 
         .catch( (err) => console.log('Ошибка: ' + err) );
       } else {
@@ -71,7 +77,10 @@ export default class Card {
           }
         } )
         .then( (res) => res.json() )
-        .then( (like) => console.log(like) )
+        .then( (like) => {
+          this._element.querySelector('.elements__like-counter').textContent = like.likes.length;
+          console.log(like);
+        } )
         .catch( (err) => console.log('Ошибка: ' + err) );
       }
     }
@@ -82,7 +91,7 @@ export default class Card {
       });
   
       this._element.querySelector('.elements__item-like').addEventListener('click', () => {  //card like
-        this._like();
+        this._likeHandler();
       });  
     }
   }

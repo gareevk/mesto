@@ -2,7 +2,6 @@ import './index.css';
 import Card from '../components/Сard.js';
 import Section from '../components/Section.js';
 import UserInfo from '../components/UserInfo.js';
-import Popup from '../components/Popup.js';
 import PopupConfirmation from '../components/PopupConfirmation.js';
 
 import {
@@ -26,26 +25,39 @@ import PopupWithForm from '../components/PopupWithForm.js';
 const cardImagePopup = new PopupWithImage('#card-popup');
 
 function addNewCard(newCard, newSection, cardTemplateSelector) {
-  const card = new Card(newCard, cardTemplateSelector, () => {
+  const card = new Card(newCard, cardTemplateSelector, 
+  () => {
     cardImagePopup.open(newCard);
   },
   () => {
-    const deleteCardPopup = new PopupConfirmation('#delete-card-popup');  //add submitHandler
+    const deleteCardPopup = new PopupConfirmation('#delete-card-popup', 
+      () => {
+        fetch(`https://mesto.nomoreparties.co/v1/cohort36/cards/${card._cardId}`, {
+          method: 'DELETE',
+          headers: {
+            authorization: '29b7c506-9f8b-4a60-9054-462b94d7dbca',
+            'Content-Type': 'application/json'
+          }
+        })
+        .then( (res) => res.json() )
+        .then( (res) => {
+          console.log(res);
+          card.deleteCard();
+          deleteCardPopup.close();
+        } );
+      });
     deleteCardPopup.open();
     deleteCardPopup.setEventListeners();
-  },
-  (cardId) => {
-    fetch(`https://mesto.nomoreparties.co/v1/cohort36/cards/${cardId}`, {
-      method: 'DELETE',
-      headers: {
-        authorization: '29b7c506-9f8b-4a60-9054-462b94d7dbca',
-        'Content-Type': 'application/json'
-      }
-    })
-    .then( (res) => res.json() )
-    .then( (res) => console.log(res) );
-  });
+    
+  } );
   const cardElement = card.generateCard();
+  //console.log(card._likes);
+  card._likes.forEach( (entry) => {
+    if (entry._id === 'ec7fb4e4a3581b01330d0b00') {
+      console.log(cardElement);
+      card.like();
+    }
+  })
   newSection.addItem(cardElement);
 }
 
