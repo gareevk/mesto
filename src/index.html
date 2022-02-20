@@ -42,7 +42,10 @@
                     <span id="name-input-error" class="popup__input-error"></span>
                     <input id="bio-input" class="popup__input" type="text" name="about" placeholder="Профессиональная деятельность" required value="Исследователь океана" minlength="2" maxlength="200">
                     <span id="bio-input-error" class="popup__input-error"></span>
-                    <button id="profile-submit-button" class="popup__save-button" type="submit">Сохранить</button>
+                    <div class="popup__save-button-container">
+                        <button id="profile-submit-button" class="popup__save-button" type="submit">Сохранить</button>
+                        <span class="popup__loading-placeholder">Сохранение...</span>
+                    </div>
                     <button class="popup__close-button" type="reset"></button> 
                 </form>
             </section>

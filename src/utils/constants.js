@@ -45,18 +45,22 @@ const proInput = popupProfile.querySelector('#bio-input');
 const profileName = document.querySelector('.profile__name');
 const profileBio = document.querySelector('.profile__description');
 const profileAvatar = document.querySelector('.profile__avatar');
+const profilePopupSaveButton = popupProfile.querySelector('#profile-submit-button');
+
 
 const popupAddCard = document.querySelector('#add-card-popup');
 const buttonAddCard = document.querySelector('.profile__add-button');
 const buttonCloseCardPopup = popupAddCard.querySelector('#card-popup-close');
 const cardNameInput = popupAddCard.querySelector('#card-name');
 const cardLinkInput = popupAddCard.querySelector('#card-link');
+const addCardSaveButton = popupAddCard.querySelector('#card-submit-button');
 
 const cardTemplateSelector = '#elements__added-item-template';
 
 const editAvatarButton = document.querySelector('.profile__edit-avatar-button');
 const editAvatarForm = document.querySelector('#add-avatar-link');
 const profileAvatarPopup = document.querySelector('#edit-avatar');
+const editAvatarSaveButton = profileAvatarPopup.querySelector('#avatar-submit-button');
 
 const profilePopupValidation = new FormValidator(validationConfig, popupProfile);
 const addCardPopupValidation = new FormValidator(validationConfig, popupAddCard);
@@ -83,5 +87,8 @@ export {
     profileAvatar,
     editAvatarButton,
     editAvatarForm,
-    avatarPopupValidation
+    avatarPopupValidation,
+    profilePopupSaveButton,
+    addCardSaveButton,
+    editAvatarSaveButton
 };
