@@ -54,8 +54,13 @@ const cardLinkInput = popupAddCard.querySelector('#card-link');
 
 const cardTemplateSelector = '#elements__added-item-template';
 
+const editAvatarButton = document.querySelector('.profile__edit-avatar-button');
+const editAvatarForm = document.querySelector('#add-avatar-link');
+const profileAvatarPopup = document.querySelector('#edit-avatar');
+
 const profilePopupValidation = new FormValidator(validationConfig, popupProfile);
 const addCardPopupValidation = new FormValidator(validationConfig, popupAddCard);
+const avatarPopupValidation = new FormValidator(validationConfig, profileAvatarPopup);
 
 export {
     initialCards,
@@ -75,5 +80,8 @@ export {
     cardTemplateSelector,
     addCardPopupValidation,
     profilePopupValidation,
-    profileAvatar
+    profileAvatar,
+    editAvatarButton,
+    editAvatarForm,
+    avatarPopupValidation
 };

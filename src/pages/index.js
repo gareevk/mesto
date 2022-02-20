@@ -3,6 +3,7 @@ import Card from '../components/Сard.js';
 import Section from '../components/Section.js';
 import UserInfo from '../components/UserInfo.js';
 import PopupConfirmation from '../components/PopupConfirmation.js';
+//import Api from '../components/Api.js';
 
 import {
   editProfile,
@@ -16,11 +17,15 @@ import {
   profileName,
   profileBio,
   profileAvatar,
-  cardDeleteButton
+  cardDeleteButton,
+  editAvatarButton,
+  editAvatarForm,
+  avatarPopupValidation
 } from '../utils/constants.js';
 
 import PopupWithImage from '../components/PopupWithImage.js';
 import PopupWithForm from '../components/PopupWithForm.js';
+import Api from '../components/Api';
 
 const cardImagePopup = new PopupWithImage('#card-popup');
 
@@ -51,7 +56,6 @@ function addNewCard(newCard, newSection, cardTemplateSelector) {
     
   } );
   const cardElement = card.generateCard();
-  //console.log(card._likes);
   card._likes.forEach( (entry) => {
     if (entry._id === 'ec7fb4e4a3581b01330d0b00') {
       console.log(cardElement);
@@ -136,6 +140,30 @@ const addCardPopup = new PopupWithForm( '#add-card-popup', (formInput) => {
   addCardPopup.close();
 } );
 
+const editAvatarPopup = new PopupWithForm('#edit-avatar', (avatarLink) => {
+  console.log(avatarLink.link);
+  fetch('https://mesto.nomoreparties.co/v1/cohort36/users/me/avatar', {
+    method: 'PATCH',
+    headers: {
+      authorization: '29b7c506-9f8b-4a60-9054-462b94d7dbca',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      avatar: avatarLink.link
+    })
+  })
+  .then( (res) => res.json() )
+  .then( (res) => {
+    console.log(res);
+    profileAvatar.src = avatarLink.link;
+    editAvatarPopup.close();
+  })
+  .catch( (err) => {
+    console.log('Ошибка: ' + err);
+    editAvatarPopup.close();
+  } );
+});
+
 buttonAddCard.addEventListener('click', () => {
   addCardPopupValidation.enableValidation();
   addCardPopup.open();
@@ -146,11 +174,18 @@ editProfile.addEventListener('click', () => {
   profilePopup.open();
 } );
 
+editAvatarButton.addEventListener('click', () => {
+  avatarPopupValidation.enableValidation();
+  editAvatarPopup.open();
+});
+
 profilePopup.setEventListeners();
 
 addCardPopup.setEventListeners();
 
 cardImagePopup.setEventListeners();
+
+editAvatarPopup.setEventListeners();
 
 function getUserInfo() {
   fetch('https://nomoreparties.co/v1/cohort36/users/me', {
@@ -167,6 +202,8 @@ function getUserInfo() {
 }
 
 getUserInfo();
+
+//const mestoApi = new Api();
 
 function getInitialCards() {
   fetch('https://mesto.nomoreparties.co/v1/cohort36/cards', {

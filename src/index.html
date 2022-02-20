@@ -17,12 +17,14 @@
         <main class="main">
             <section class="profile">
                 <div class="profile__info">
-                    <img class="profile__avatar" src="<%=require('./images/kusto.svg')%>" alt="Аватар профиля">
-                    <div class="profile__bio">
-                        <h1 class="profile__name">Жак-Ив Кусто</h1>
-                        <button class="profile__edit" type="button"></button>
-                        <p class="profile__description">Исследователь океана</p>
-                    </div>   
+                    <div class="profile__avatar-container">
+                        <button class="profile__edit-avatar-button" type="button"><img class="profile__avatar" src="<%=require('./images/kusto.svg')%>" alt="Аватар профиля"><img class="profile__edit-avatar-icon" src ="<%=require('./images/avatar-edit.svg')%>" ></button>
+                    </div>    
+                <div class="profile__bio">
+                    <h1 class="profile__name">Жак-Ив Кусто</h1>
+                    <button class="profile__edit" type="button"></button>
+                    <p class="profile__description">Исследователь океана</p>
+                </div>   
                 </div>
                 <button class="profile__add-button" type="button"></button>
             </section>
@@ -68,6 +70,15 @@
                     <button id="delete-card-button" class="popup__save-button" type="submit">Да</button>
                     <button id="card-close" class="popup__close-button" type="reset"></button>
                 </div>
+            </section>
+            <section class="popup" id="edit-avatar">
+                <form id="add-avatar-link" class="popup__container popup_profile-edit" name="cardPopup" novalidate>
+                    <h2 class="popup__heading">Обновить аватар</h2>
+                    <input id="avatar-link" class="popup__input" type="url" name="link" required minlength="2" placeholder="Ссылка на картинку">
+                    <span id="avatar-link-error" class="popup__input-error"></span>
+                    <button id="avatar-submit-button"  class="popup__save-button" type="submit">Сохранить</button>
+                    <button id="card-popup-close" class="popup__close-button" type="reset"></button>
+                </form>
             </section>
         </main>
     </div>
