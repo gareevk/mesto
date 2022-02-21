@@ -17,15 +17,46 @@ import {
   profileAvatar,
   editAvatarButton,
   avatarPopupValidation,
-  profilePopupLoadingPlaceolder,
+  profilePopupLoadingPlaceholder,
   popupAddCardLoadingPlaceholder,
-  profileAvatarLoadingPlaceholder
+  profileAvatarLoadingPlaceholder,
+  apiConfig
 } from '../utils/constants.js';
 
 import PopupWithImage from '../components/PopupWithImage.js';
 import PopupWithForm from '../components/PopupWithForm.js';
 
 const cardImagePopup = new PopupWithImage('#card-popup');
+
+const mestoApi = new Api(apiConfig);
+
+const addCardPopup = new PopupWithForm( 
+  '#add-card-popup',
+  (formInput) => {
+    mestoApi.addCard(formInput)
+    .then( res => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .then( (cardData) => {
+        const card = [cardData];
+        const newCard = new Section( {
+          items: card,
+          renderer: (item) => {
+            addNewCard( item, newCard, '#elements__item-template');
+          }
+        },
+          '.elements__gallery'
+        );
+        newCard.renderItems();
+        addCardPopup.close();
+    })
+    .catch( (err) => console.log('Ошибка, загрузка не удалась: '+ err) )
+    .finally( () => mestoApi.handleLoadingRenedering(false, popupAddCardLoadingPlaceholder)); 
+  } 
+);
 
 function addNewCard(newCard, newSection, cardTemplateSelector) {
   const card = new Card(
@@ -38,20 +69,18 @@ function addNewCard(newCard, newSection, cardTemplateSelector) {
       const deleteCardPopup = new PopupConfirmation(
         '#delete-card-popup',
         () => {
-          const mestoApi = new Api(
-            `https://mesto.nomoreparties.co/v1/cohort36/cards/${card._cardId}`,
-            'DELETE',
-            {
-              authorization: '29b7c506-9f8b-4a60-9054-462b94d7dbca',
-              'Content-Type': 'application/json'
-            },
-            '',
-            (res) => {
-              card.removeCardElement();
-              deleteCardPopup.close();
+          mestoApi.deleteCard(card._cardId)
+          .then( res => {
+            if (res.ok) {
+              return res.json();
             }
-          );
-          mestoApi.deleteCard();
+            return Promise.reject(`Ошибка: ${res.status}`);
+          })
+          .then( () => {
+            card.removeCardElement();
+            deleteCardPopup.close();
+          })
+          .catch( (err) => console.log('Ошибка, загрузка не удалась: '+ err) ); 
         }  
       );
       deleteCardPopup.open();
@@ -59,42 +88,22 @@ function addNewCard(newCard, newSection, cardTemplateSelector) {
     },
     () => {
       const cardData = card.getCardInfo();
-      if (cardData.isLiked) {
-        const mestoApi = new Api(
-          `https://mesto.nomoreparties.co/v1/cohort36/cards/${cardData.cardId}/likes`,
-          'PUT',
-          {
-            authorization: '29b7c506-9f8b-4a60-9054-462b94d7dbca',
-            'Content-Type': 'application/json'
-          },
-          '',
-          (counter) => {
-            cardData.element.querySelector('.elements__like-counter').textContent = counter;
-          }
-        )
-        mestoApi.likeCard();
-      } else {
-        const mestoApi = new Api(
-          `https://mesto.nomoreparties.co/v1/cohort36/cards/${cardData.cardId}/likes`,
-          'DELETE',
-          {
-            authorization: '29b7c506-9f8b-4a60-9054-462b94d7dbca',
-            'Content-Type': 'application/json'
-          },
-          '',
-          (counter) => {
-            cardData.element.querySelector('.elements__like-counter').textContent = counter;
-          }
-        )
-        mestoApi.likeCard();
-      }
+      mestoApi.likeCard(cardData.isLiked, cardData.cardId)
+      .then( res => {
+        if (res.ok) {
+          return res.json();
+        }
+        return Promise.reject(`Ошибка: ${res.status}`);
+      })
+      .then( (likes) => {
+        cardData.element.querySelector('.elements__like-counter').textContent = likes.likes.length;
+      } )
+      .catch( (err) => console.log('Ошибка, загрузка не удалась: '+ err) );  
     }  
   )
   const cardElement = card.generateCard();
   newSection.addItem(cardElement);
 }
-
-
 
 const profile = new UserInfo( '.profile__name', '.profile__description', '.profile__avatar' );
 
@@ -102,98 +111,60 @@ const profilePopup = new PopupWithForm(
   '#profile-popup',
   (formInput) => {
     profile.setUserInfo(formInput);
-    console.log(profile.getUserInfo());
-    const mestoApi = new Api(
-      'https://mesto.nomoreparties.co/v1/cohort36/users/me',
-      'PATCH',
-      {
-        authorization: '29b7c506-9f8b-4a60-9054-462b94d7dbca',
-        'Content-Type': 'application/json'
-      },
-      JSON.stringify({
-        name: profile.getUserInfo().name,
-        about: profile.getUserInfo().info
-      }),
-      (profileInfo) => {
-        nameInput.value = profileInfo.name;
-        proInput.value = profileInfo.about;
-      },
-      profilePopupLoadingPlaceolder
-    );
-    mestoApi.setProfileInfo();
-    profilePopup.close();
+    mestoApi.setProfileInfo(profile.getUserInfo().name, profile.getUserInfo().info)
+    .then( res => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .then( (profileInfo) => {
+      nameInput.value = profileInfo.name;
+      proInput.value = profileInfo.about;
+    })
+    .catch( (err) => console.log('Ошибка, загрузка не удалась: '+ err) )
+    .finally( () => { 
+      mestoApi.handleLoadingRenedering(false, profilePopupLoadingPlaceholder);
+      profilePopup.close();
+    });
   }
 )
-
-const addCardPopup = new PopupWithForm( 
-  '#add-card-popup',
-  (formInput) => {
-    const mestoApi = new Api(
-      'https://mesto.nomoreparties.co/v1/cohort36/cards',
-      'POST',
-      {
-        authorization: '29b7c506-9f8b-4a60-9054-462b94d7dbca',
-        'Content-Type': 'application/json'
-      },
-      JSON.stringify({
-        name: formInput.name,
-        link: formInput.link
-      }),
-      (cardData) => {
-        const card = [cardData];
-        const newCard = new Section( {
-          items: card,
-          renderer: (item) => {
-            addNewCard( item, newCard, '#elements__item-template');
-          }
-        },
-          '.elements__gallery'
-        );
-        newCard.renderItems();
-        addCardPopup.close();
-      },
-      popupAddCardLoadingPlaceholder
-    );
-    mestoApi.addCard();
-  } 
-);
 
 const editAvatarPopup = new PopupWithForm( 
   '#edit-avatar',
   (avatarLink) => {
-    const mestoApi = new Api(
-      'https://mesto.nomoreparties.co/v1/cohort36/users/me/avatar',
-      'PATCH',
-      {
-        authorization: '29b7c506-9f8b-4a60-9054-462b94d7dbca',
-        'Content-Type': 'application/json'
-      },
-      JSON.stringify({
-        avatar: avatarLink.link
-      }),
-      (avatarLink) => {
-        profileAvatar.src = avatarLink.avatar;
+    mestoApi.setAvatar(avatarLink.link)
+    .then( res => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .then( (avatar) => {
+        profileAvatar.src = avatar.avatar;
         editAvatarPopup.close();
-      },
-      profileAvatarLoadingPlaceholder
-    );
-    mestoApi.setAvatar();
+    })
+    .catch( (err) => console.log('Ошибка, загрузка не удалась: '+ err) )
+    .finally( () => mestoApi.handleLoadingRenedering(false, profileAvatarLoadingPlaceholder));
   } );
 
 buttonAddCard.addEventListener('click', () => {
-  addCardPopupValidation.enableValidation();
   addCardPopup.open();
 } );
 
 editProfile.addEventListener('click', () => {
-  profilePopupValidation.enableValidation();
+  
   profilePopup.open();
 } );
 
 editAvatarButton.addEventListener('click', () => {
-  avatarPopupValidation.enableValidation();
+  
   editAvatarPopup.open();
 });
+
+addCardPopupValidation.enableValidation();
+avatarPopupValidation.enableValidation();
+profilePopupValidation.enableValidation();
 
 profilePopup.setEventListeners();
 
@@ -204,44 +175,54 @@ cardImagePopup.setEventListeners();
 editAvatarPopup.setEventListeners();
 
 function getUserInfo() {
-  const mestoApi = new Api(
-    'https://nomoreparties.co/v1/cohort36/users/me',
-    'GET',
-    {
-      authorization: '29b7c506-9f8b-4a60-9054-462b94d7dbca'
-    },
-    '',
-    (user) => {
+  mestoApi.getUserInfo()
+  .then( res => {
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(`Ошибка: ${res.status}`);
+  })
+  .then( (user) => {
+    console.log(user);
       profile.setUserInfo(user);
       profile.setUserAvatar(user);
       nameInput.value = profileName.textContent;
       proInput.value = profileBio.textContent;
-    }
-  );
-  mestoApi.getUserInfo();
+  })
+  .catch( (err) => console.log('Ошибка, загрузка не удалась: '+ err) ); 
 }
 
-getUserInfo();
+
+/*
+const newCard = new Section(
+  () => {
+    addNewCard( newCard.getCardData(), newCard, '#elements__item-template');
+  },
+  '.elements__gallery'
+);
+*/
 
 function getInitialCards() {
-  const mestoApi = new Api(
-    'https://mesto.nomoreparties.co/v1/cohort36/cards',
-    'GET',
-    {
-      authorization: '29b7c506-9f8b-4a60-9054-462b94d7dbca'
-    },
-    '',
-    (cards) => {
-      const initialCardSections = new Section( {
-        items: cards,
-        renderer: (initialCard) => {
-          addNewCard( initialCard, initialCardSections, '#elements__item-template');
-        }
-      } , '.elements__gallery');
-      initialCardSections.renderItems();
+  mestoApi.getInitialCards()
+  .then( res => {
+    if (res.ok) {
+      return res.json();
     }
-  );
-  mestoApi.getInitialCards();
+    return Promise.reject(`Ошибка: ${res.status}`);
+  })
+  .then( (cards) => {
+    console.log(cards);
+    const initialCardSections = new Section( {
+      items: cards,
+      renderer: (initialCard) => {
+        addNewCard( initialCard, initialCardSections, '#elements__item-template');
+      }
+    } , '.elements__gallery');
+    initialCardSections.renderItems();
+  } )
+  .catch( (err) => console.log('Ошибка, загрузка не удалась: '+ err) );
 }
 
-getInitialCards();
+Promise.all(getInitialCards(), getUserInfo())
+.then( (res) => console.log(res) )
+.catch( (err) => console.log('Ошибка, загрузка не удалась: '+ err) );
