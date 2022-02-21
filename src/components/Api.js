@@ -1,204 +1,135 @@
 export default class Api {
-    constructor( baseUrl, methodType, headersConfig, bodyConfig, requestHandler, saveButton ) {
-        this._url = baseUrl;
-        this._method = methodType;
-        this._headers = headersConfig;
-        this._body = bodyConfig;
-        this._requestHandler = requestHandler;
-        this._saveButton = saveButton;
+    constructor( apiConfig ) {
+        this._getUserInfoUrl = apiConfig.getUserInfoUrl;
+        this._getUserInfoMethod = apiConfig.getUserInfoMethod;
 
+        this._getInitialCardsUrl = apiConfig.getInitialCardsUrl;
+        this._getInitialCardsMethod = apiConfig.getInitialCardsMethod;
+
+        this._avatarUpdateUrl = apiConfig.avatarUpdateUrl;
+        this._avatarUpdateMethod = apiConfig.avatarUpdateMethod;
+
+        this._addCardUrl = apiConfig.addCardUrl;
+        this._addCardMethod = apiConfig.addCardMethod;
+
+        this._setProfileInfoUrl = apiConfig.setProfileInfoUrl;
+        this._setProfileInfoMethod = apiConfig.setProfileInfoMethod;
+
+        this._likeCardMethodPut = apiConfig.likeCardMethodPut;
+        this._likeCardMethodDelete = apiConfig.likeCardMethodDelete;
+
+        this._deleteCardMethod = apiConfig.deleteCardMethod;
+        this._userToken = apiConfig.userToken;
+        
+        this._profileInfoLoading = document.querySelector('#profile-loading-placeholder');
+        this._profileAvatarLoading = document.querySelector('#avatar-loading-placeholder');
+        this._addCardLoading = document.querySelector('#add-card-loading-placeholder');
     }
 
-    _handleLoadingRenedering(isLoading) {
+    handleLoadingRenedering(isLoading, loadingPlaceholder) {
         if (isLoading) {
-            this._saveButton.classList.add('.popup__loading-placeholder_visible');
+            loadingPlaceholder.classList.add('.popup__loading-placeholder_visible');
           } else {
-            this._saveButton.classList.remove('.popup__loading-placeholder_visible');
+            loadingPlaceholder.classList.remove('.popup__loading-placeholder_visible');
           }
     }
 
-    likeCard() {
-        fetch(
-            this._url,
+    deleteCard(cardId) {
+        return fetch(
+            `https://mesto.nomoreparties.co/v1/cohort36/cards/${cardId}`,
             {
-                method: this._method,
-                headers: this._headers
+                method:  this._deleteCardMethod,
+                headers: {
+                    authorization: this._userToken,
+                    'Content-Type': 'application/json'
+                }
             } 
         )
-        .then( res => {
-            if (res.ok) {
-              return res.json();
-            }
-            return Promise.reject(`Ошибка: ${res.status}`);
-        })
-        .then( (res) => {
-            this._requestHandler(res.likes.length);
-        } )
-        .catch( (err) => console.log('Ошибка, загрузка не удалась: '+ err) );
     }
 
-    getCardStatus() {
-        fetch(
-            this._url,
-            {
-                method: this._method,
-                headers: this._headers
-            } 
-        )
-        .then( res => {
-            if (res.ok) {
-              return res.json();
-            }
-            return Promise.reject(`Ошибка: ${res.status}`);
-        })
-        .then( (profileInfo) => {
-            this._requestHandler(profileInfo);
-        })
-        .catch( (err) => console.log('Ошибка, загрузка не удалась: '+ err) );
-    }
-    
-
-    deleteCard() {
-        fetch(
-            this._url,
-            {
-                method: this._method,
-                headers: this._headers
-            } 
-        )
-        .then( res => {
-            if (res.ok) {
-              return res.json();
-            }
-            return Promise.reject(`Ошибка: ${res.status}`);
-        })
-        .then( (profileInfo) => {
-            this._requestHandler(profileInfo);
-        })
-        .catch( (err) => console.log('Ошибка, загрузка не удалась: '+ err) );
-    }
-
-    setProfileInfo() {
-        this._handleLoadingRenedering(true);
-        fetch(
-            this._url,
-            {
-                method: this._method,
-                headers: this._headers,
-                body: this._body
-            } 
-        )
-        .then( res => {
-            if (res.ok) {
-              return res.json();
-            }
-            return Promise.reject(`Ошибка: ${res.status}`);
-        })
-        .then( (profileInfo) => {
-            this._requestHandler(profileInfo);
-        })
-        .catch( (err) => console.log('Ошибка, загрузка не удалась: '+ err) )
-        .finally( () => this._handleLoadingRenedering(false));
-    }
-
-    addCard() {
-        this._handleLoadingRenedering(true);
-        fetch(
-            this._url,
-            {
-                method: this._method,
-                headers: this._headers,
-                body: this._body
-            }
-        )
-        .then( res => {
-            if (res.ok) {
-              return res.json();
-            }
-            return Promise.reject(`Ошибка: ${res.status}`);
-        })
-        .then( (card) => {
-            this._requestHandler(card);
-        })
-        .catch( (err) => console.log('Ошибка, загрузка не удалась: '+ err) )
-        .finally( () => this._handleLoadingRenedering(false));
-    }
-
-    setAvatar() {
-        this._handleLoadingRenedering(true);
-        fetch(
-            this._url,
-        {
-            method: this._method,
-            headers: this._headers,
-            body: this._body
+    likeCard(isLiked, cardId) {
+        if (isLiked) {
+            return fetch(`https://mesto.nomoreparties.co/v1/cohort36/cards/${cardId}/likes`, {
+                method: this._likeCardMethodPut,
+                headers: {
+                    authorization: this._userToken,
+                    'Content-Type': 'application/json'
+                }                
+            })
+        } else {
+            return fetch(`https://mesto.nomoreparties.co/v1/cohort36/cards/${cardId}/likes`, {
+                method: this._likeCardMethodDelete,
+                headers: {
+                    authorization: this._userToken,
+                    'Content-Type': 'application/json'
+                }
+            })
         }
+    }
+
+    setProfileInfo(name, info) {
+        this.handleLoadingRenedering(true, this._profileInfoLoading);
+        return fetch(
+            this._setProfileInfoUrl,
+            {
+                method: this._setProfileInfoMethod,
+                headers: {
+                    authorization: this._userToken,
+                    'Content-Type': 'application/json'
+                  },
+                body: JSON.stringify({
+                    name: name,
+                    about: info
+                })
+            } 
         )
-        .then( res => {
-            if (res.ok) {
-              return res.json();
-            }
-            return Promise.reject(`Ошибка: ${res.status}`);
-        })
-        .then( (avatar) => {
-            this._requestHandler(avatar);
-        })
-        .catch( (err) => console.log('Ошибка, загрузка не удалась: '+ err) )
-        .finally( () => this._handleLoadingRenedering(false));
     }
 
     getInitialCards() {
-        fetch(
-            this._url, 
+        console.log(this._getInitialCardsUrl);
+        return fetch(
+            this._getInitialCardsUrl, 
             {
-                headers: this._headers
+                method: this._getInitialCardsMethod,
+                headers: { authorization: this._userToken }
             })
-        .then( res => {
-            if (res.ok) {
-              return res.json();
+    }
+
+    addCard(formInput) {
+        this.handleLoadingRenedering(true, this._addCardLoading);
+        return fetch(
+            this._addCardUrl,
+            {
+                method: this._addCardMethod,
+                headers: {authorization: this._userToken,
+                'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: formInput.name,
+                    link: formInput.link
+                  })
             }
-            return Promise.reject(`Ошибка: ${res.status}`);
+        )
+    }
+
+    setAvatar(avatarLink) {
+        this.handleLoadingRenedering(true, this._profileAvatarLoading);
+        return fetch( this._avatarUpdateUrl,
+        {
+            method: this._avatarUpdateMethod,
+            headers: { authorization: this._userToken, 'Content-Type': 'application/json'},
+            body: JSON.stringify({ avatar: avatarLink})
         })
-        .then( (cards) => {
-            this._requestHandler(cards); 
-         } )
-        .catch( (err) => console.log('Ошибка, загрузка не удалась: '+ err) );
     }
 
     getUserInfo() {
-        fetch(
-            this._url,
+        return fetch(
+            this._getUserInfoUrl,
             {
-            method: this._method,
-            headers: this._headers
+            method: this._getUserInfoMethod,
+            headers: {
+              authorization: this._userToken
+            },
             }
         )
-        .then( res => {
-            if (res.ok) {
-              return res.json();
-            }
-            return Promise.reject(`Ошибка: ${res.status}`);
-        })
-        .then( (user) => {
-            this._requestHandler(user);
-        })
-        .catch( (err) => console.log('Ошибка, загрузка не удалась: '+ err) );
-    }
-
-    sendRequest() {
-        fetch(this._url, {
-            method: this._method,
-            headers: this._headers,
-            body: this._body
-        })
-        .then( res => {
-            if (res.ok) {
-              return res.json();
-            }
-            return Promise.reject(`Ошибка: ${res.status}`);
-        })
-        .then( res => this._requestHandler(res))
-        .catch( err => console.log('Ошибка: ' + err));
-
-    }
+    } 
 }
