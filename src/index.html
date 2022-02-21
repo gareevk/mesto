@@ -17,12 +17,14 @@
         <main class="main">
             <section class="profile">
                 <div class="profile__info">
-                    <img class="profile__avatar" src="<%=require('./images/kusto.svg')%>" alt="Аватар профиля">
-                    <div class="profile__bio">
-                        <h1 class="profile__name">Жак-Ив Кусто</h1>
-                        <button class="profile__edit" type="button"></button>
-                        <p class="profile__description">Исследователь океана</p>
-                    </div>   
+                    <div class="profile__avatar-container">
+                        <button class="profile__edit-avatar-button" type="button"><img class="profile__avatar" src="<%=require('./images/kusto.svg')%>" alt="Аватар профиля"><img class="profile__edit-avatar-icon" src ="<%=require('./images/avatar-edit.svg')%>" ></button>
+                    </div>    
+                <div class="profile__bio">
+                    <h1 class="profile__name">Жак-Ив Кусто</h1>
+                    <button class="profile__edit" type="button"></button>
+                    <p class="profile__description">Исследователь океана</p>
+                </div>   
                 </div>
                 <button class="profile__add-button" type="button"></button>
             </section>
@@ -38,9 +40,12 @@
                     <h2 class="popup__heading">Редактировать профиль</h2>
                     <input id="name-input" class="popup__input" type="text" name="name" placeholder="Имя" required value="Жак-Ив Кусто" minlength="2" maxlength="40">
                     <span id="name-input-error" class="popup__input-error"></span>
-                    <input id="bio-input" class="popup__input" type="text" name="bio" placeholder="Профессиональная деятельность" required value="Исследователь океана" minlength="2" maxlength="200">
+                    <input id="bio-input" class="popup__input" type="text" name="about" placeholder="Профессиональная деятельность" required value="Исследователь океана" minlength="2" maxlength="200">
                     <span id="bio-input-error" class="popup__input-error"></span>
-                    <button id="profile-submit-button" class="popup__save-button" type="submit">Сохранить</button>
+                    <div class="popup__save-button-container">
+                        <button id="profile-submit-button" class="popup__save-button" type="submit">Сохранить</button>
+                        <span class="popup__loading-placeholder">Сохранение...</span>
+                    </div>
                     <button class="popup__close-button" type="reset"></button> 
                 </form>
             </section>
@@ -51,7 +56,10 @@
                     <span id="card-name-error" class="popup__input-error"></span>
                     <input id="card-link" class="popup__input" type="url" name="link" required minlength="2" placeholder="Ссылка на картинку">
                     <span id="card-link-error" class="popup__input-error"></span>
-                    <button id="card-submit-button"  class="popup__save-button" type="submit">Создать</button>
+                    <div class="popup__save-button-container">
+                        <button id="card-submit-button"  class="popup__save-button" type="submit">Создать</button>
+                        <span class="popup__loading-placeholder">Сохранение...</span>
+                    </div>
                     <button id="card-popup-close" class="popup__close-button" type="reset"></button>
                 </form>
             </section>
@@ -62,6 +70,27 @@
                     <p class="popup__description"></p>
                 </div>
             </section>
+            <section class="popup" id="delete-card-popup">
+                <div class="popup__delete-card">
+                    <p class="popup__delete-confirm">Вы уверены?</p>
+                    <div class="popup__save-button-container">
+                        <button id="delete-card-button" class="popup__save-button" type="submit">Да</button>
+                    </div>
+                    <button id="card-close" class="popup__close-button" type="reset"></button>
+                </div>
+            </section>
+            <section class="popup" id="edit-avatar">
+                <form id="add-avatar-link" class="popup__container popup_profile-edit" name="cardPopup" novalidate>
+                    <h2 class="popup__heading">Обновить аватар</h2>
+                    <input id="avatar-link" class="popup__input" type="url" name="link" required minlength="2" placeholder="Ссылка на картинку">
+                    <span id="avatar-link-error" class="popup__input-error"></span>
+                    <div class="popup__save-button-container">
+                        <button id="avatar-submit-button"  class="popup__save-button" type="submit">Сохранить</button>
+                        <span class="popup__loading-placeholder">Сохранение...</span>
+                    </div>
+                    <button id="card-popup-close" class="popup__close-button" type="reset"></button>
+                </form>
+            </section>
         </main>
     </div>
     <template id="elements__item-template">
@@ -69,7 +98,10 @@
             <button class="elements__item-button"><img class="elements__item-image" src="#" alt="Карточка с изображением места"></button>
             <div class="elements__item-subheading">
                 <h2 class="elements__item-name">Место</h2>
-                <button class="elements__item-like" type="button"></button>
+                <div class="elements__like">
+                    <button class="elements__item-like" type="button"></button>
+                    <p class="elements__like-counter">0</p>
+                </div>
             </div>
             <button class="elements__thrash-can" type="reset"></button>
         </li>

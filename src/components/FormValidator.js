@@ -60,7 +60,8 @@ export default class FormValidator {
     });
   }
 
-  enableValidation() {         
+  enableValidation() {
+    console.log(this._validationElement);         
     this._validationElement.addEventListener('submit', (evt) => {
         evt.preventDefault();
     });  
