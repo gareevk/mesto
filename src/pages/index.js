@@ -17,9 +17,9 @@ import {
   profileAvatar,
   editAvatarButton,
   avatarPopupValidation,
-  profilePopupSaveButton,
-  addCardSaveButton,
-  editAvatarSaveButton
+  profilePopupLoadingPlaceolder,
+  popupAddCardLoadingPlaceholder,
+  profileAvatarLoadingPlaceholder
 } from '../utils/constants.js';
 
 import PopupWithImage from '../components/PopupWithImage.js';
@@ -88,8 +88,7 @@ function addNewCard(newCard, newSection, cardTemplateSelector) {
         )
         mestoApi.likeCard();
       }
-    }
-    
+    }  
   )
   const cardElement = card.generateCard();
   newSection.addItem(cardElement);
@@ -119,8 +118,7 @@ const profilePopup = new PopupWithForm(
         nameInput.value = profileInfo.name;
         proInput.value = profileInfo.about;
       },
-      document.querySelector('.popup__loading-placeholder')
-      //profilePopupSaveButton
+      profilePopupLoadingPlaceolder
     );
     mestoApi.setProfileInfo();
     profilePopup.close();
@@ -154,7 +152,7 @@ const addCardPopup = new PopupWithForm(
         newCard.renderItems();
         addCardPopup.close();
       },
-      addCardSaveButton
+      popupAddCardLoadingPlaceholder
     );
     mestoApi.addCard();
   } 
@@ -177,7 +175,7 @@ const editAvatarPopup = new PopupWithForm(
         profileAvatar.src = avatarLink.avatar;
         editAvatarPopup.close();
       },
-      editAvatarSaveButton
+      profileAvatarLoadingPlaceholder
     );
     mestoApi.setAvatar();
   } );
