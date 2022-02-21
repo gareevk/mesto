@@ -11,9 +11,9 @@ export default class Api {
 
     _handleLoadingRenedering(isLoading) {
         if (isLoading) {
-            this._saveButton.classList.add('popup__save-button_loading');
+            this._saveButton.classList.add('.popup__loading-placeholder_visible');
           } else {
-            this._saveButton.classList.remove('popup__save-button_loading');
+            this._saveButton.classList.remove('.popup__loading-placeholder_visible');
           }
     }
 

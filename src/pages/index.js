@@ -119,7 +119,8 @@ const profilePopup = new PopupWithForm(
         nameInput.value = profileInfo.name;
         proInput.value = profileInfo.about;
       },
-      profilePopupSaveButton
+      document.querySelector('.popup__loading-placeholder')
+      //profilePopupSaveButton
     );
     mestoApi.setProfileInfo();
     profilePopup.close();

@@ -2,15 +2,19 @@
     background: #000000;
     border-radius: 2px;
     width: 358px;
-    height: 50px;
+    height: 36px;
     color: #FFFFFF;
-    cursor: pointer;
     text-align: center;
+    padding-top: 14px;
     font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 18px;
     line-height: 22px;
     border: 0;
-    float: left; 
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 20;
+    visibility: hidden;
 }

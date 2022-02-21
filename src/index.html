@@ -56,7 +56,10 @@
                     <span id="card-name-error" class="popup__input-error"></span>
                     <input id="card-link" class="popup__input" type="url" name="link" required minlength="2" placeholder="Ссылка на картинку">
                     <span id="card-link-error" class="popup__input-error"></span>
-                    <button id="card-submit-button"  class="popup__save-button" type="submit">Создать</button>
+                    <div class="popup__save-button-container">
+                        <button id="card-submit-button"  class="popup__save-button" type="submit">Создать</button>
+                        <span class="popup__loading-placeholder">Сохранение...</span>
+                    </div>
                     <button id="card-popup-close" class="popup__close-button" type="reset"></button>
                 </form>
             </section>
@@ -70,7 +73,9 @@
             <section class="popup" id="delete-card-popup">
                 <div class="popup__delete-card">
                     <p class="popup__delete-confirm">Вы уверены?</p>
-                    <button id="delete-card-button" class="popup__save-button" type="submit">Да</button>
+                    <div class="popup__save-button-container">
+                        <button id="delete-card-button" class="popup__save-button" type="submit">Да</button>
+                    </div>
                     <button id="card-close" class="popup__close-button" type="reset"></button>
                 </div>
             </section>
@@ -79,7 +84,10 @@
                     <h2 class="popup__heading">Обновить аватар</h2>
                     <input id="avatar-link" class="popup__input" type="url" name="link" required minlength="2" placeholder="Ссылка на картинку">
                     <span id="avatar-link-error" class="popup__input-error"></span>
-                    <button id="avatar-submit-button"  class="popup__save-button" type="submit">Сохранить</button>
+                    <div class="popup__save-button-container">
+                        <button id="avatar-submit-button"  class="popup__save-button" type="submit">Сохранить</button>
+                        <span class="popup__loading-placeholder">Сохранение...</span>
+                    </div>
                     <button id="card-popup-close" class="popup__close-button" type="reset"></button>
                 </form>
             </section>
