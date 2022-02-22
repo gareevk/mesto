@@ -1,5 +1,5 @@
 export default class Card {
-    constructor (card , templateSelector, handleCardClick, handleDeleteButtonClick, handleLikeClick ) {
+    constructor (card , templateSelector, handleCardClick, handleDeleteButtonClick, handleLikeClick, userId ) {
       this._card = card;
       this._cardId = card._id;
       this._cardOwner = card.owner._id;
@@ -12,7 +12,7 @@ export default class Card {
       this._cardId = card._id;
       this._deleteCard = handleDeleteButtonClick;
       this._handleLikeClick = handleLikeClick;
-      this._userId = 'ec7fb4e4a3581b01330d0b00';
+      this._userId = userId;
     }
   
     _getTemplate() {
@@ -40,7 +40,7 @@ export default class Card {
         }
       })
 
-      if (this._cardOwner !== this._userId) {   // so far I know nothing about current session user ID
+      if (this._cardOwner !== this._userId) {
         this._element.querySelector('.elements__thrash-can').remove();
       } else {
         this._element.querySelector('.elements__thrash-can').addEventListener('click', () => {
