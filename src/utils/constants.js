@@ -38,19 +38,7 @@ const initialCards = [
   };
 
   const apiConfig = {
-    userToken: '29b7c506-9f8b-4a60-9054-462b94d7dbca',
-    getUserInfoUrl: 'https://mesto.nomoreparties.co/v1/cohort36/users/me',
-    getInitialCardsUrl: 'https://mesto.nomoreparties.co/v1/cohort36/cards',
-    getInitialCardsMethod: 'GET',
-    avatarUpdateUrl: 'https://mesto.nomoreparties.co/v1/cohort36/users/me/avatar',
-    avatarUpdateMethod: 'PATCH',
-    addCardUrl: 'https://mesto.nomoreparties.co/v1/cohort36/cards',
-    addCardMethod: 'POST',
-    setProfileInfoUrl: 'https://mesto.nomoreparties.co/v1/cohort36/users/me',
-    setProfileInfoMethod: 'PATCH',
-    likeCardMethodPut: 'PUT',
-    likeCardMethodDelete: 'DELETE',
-    deleteCardMethod: 'DELETE'
+    userToken: '29b7c506-9f8b-4a60-9054-462b94d7dbca'
   }
 
   const cardFullsizeSource = document.querySelector('.popup__card-fullscreen');

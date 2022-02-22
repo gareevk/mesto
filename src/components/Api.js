@@ -1,25 +1,8 @@
 export default class Api {
     constructor( apiConfig ) {
-        this._getUserInfoUrl = apiConfig.getUserInfoUrl;
-        this._getUserInfoMethod = apiConfig.getUserInfoMethod;
-
-        this._getInitialCardsUrl = apiConfig.getInitialCardsUrl;
-        this._getInitialCardsMethod = apiConfig.getInitialCardsMethod;
-
-        this._avatarUpdateUrl = apiConfig.avatarUpdateUrl;
-        this._avatarUpdateMethod = apiConfig.avatarUpdateMethod;
-
-        this._addCardUrl = apiConfig.addCardUrl;
-        this._addCardMethod = apiConfig.addCardMethod;
-
-        this._setProfileInfoUrl = apiConfig.setProfileInfoUrl;
-        this._setProfileInfoMethod = apiConfig.setProfileInfoMethod;
-
-        this._likeCardMethodPut = apiConfig.likeCardMethodPut;
-        this._likeCardMethodDelete = apiConfig.likeCardMethodDelete;
-
-        this._deleteCardMethod = apiConfig.deleteCardMethod;
         this._userToken = apiConfig.userToken;
+
+        this._baseUrl = 'https://mesto.nomoreparties.co/v1/cohort36/';
         
         this._profileInfoLoading = document.querySelector('#profile-loading-placeholder');
         this._profileAvatarLoading = document.querySelector('#avatar-loading-placeholder');
@@ -36,33 +19,51 @@ export default class Api {
 
     deleteCard(cardId) {
         return fetch(
-            `https://mesto.nomoreparties.co/v1/cohort36/cards/${cardId}`,
+            this._baseUrl + `cards/${cardId}`,
             {
-                method:  this._deleteCardMethod,
+                method:  'DELETE',
                 headers: {
                     authorization: this._userToken,
                     'Content-Type': 'application/json'
                 }
             } 
         )
+        .then( res => {
+            if (res.ok) {
+              return res.json();
+            }
+            return Promise.reject(`Ошибка: ${res.status}`);
+        })
     }
 
     likeCard(isLiked, cardId) {
         if (isLiked) {
-            return fetch(`https://mesto.nomoreparties.co/v1/cohort36/cards/${cardId}/likes`, {
-                method: this._likeCardMethodPut,
+            return fetch(this._baseUrl + `cards/${cardId}/likes`, {
+                method: 'PUT',
                 headers: {
                     authorization: this._userToken,
                     'Content-Type': 'application/json'
                 }                
             })
+            .then( res => {
+                if (res.ok) {
+                  return res.json();
+                }
+                return Promise.reject(`Ошибка: ${res.status}`);
+            })
         } else {
-            return fetch(`https://mesto.nomoreparties.co/v1/cohort36/cards/${cardId}/likes`, {
-                method: this._likeCardMethodDelete,
+            return fetch(this._baseUrl + `cards/${cardId}/likes`, {
+                method: 'DELETE',
                 headers: {
                     authorization: this._userToken,
                     'Content-Type': 'application/json'
                 }
+            })
+            .then( res => {
+                if (res.ok) {
+                  return res.json();
+                }
+                return Promise.reject(`Ошибка: ${res.status}`);
             })
         }
     }
@@ -70,9 +71,9 @@ export default class Api {
     setProfileInfo(name, info) {
         this.handleLoadingRenedering(true, this._profileInfoLoading);
         return fetch(
-            this._setProfileInfoUrl,
+            this._baseUrl + 'users/me',
             {
-                method: this._setProfileInfoMethod,
+                method: 'PATCH',
                 headers: {
                     authorization: this._userToken,
                     'Content-Type': 'application/json'
@@ -83,24 +84,36 @@ export default class Api {
                 })
             } 
         )
+        .then( res => {
+            if (res.ok) {
+              return res.json();
+            }
+            return Promise.reject(`Ошибка: ${res.status}`);
+        })
     }
 
     getInitialCards() {
-        console.log(this._getInitialCardsUrl);
         return fetch(
-            this._getInitialCardsUrl, 
+            this._baseUrl + 'cards', 
             {
-                method: this._getInitialCardsMethod,
+                method: 'GET',
                 headers: { authorization: this._userToken }
             })
+            .then( res => {
+                if (res.ok) {
+                  return res.json();
+                }
+                return Promise.reject(`Ошибка: ${res.status}`);
+            })
+
     }
 
     addCard(formInput) {
         this.handleLoadingRenedering(true, this._addCardLoading);
         return fetch(
-            this._addCardUrl,
+            this._baseUrl + 'cards',
             {
-                method: this._addCardMethod,
+                method: 'POST',
                 headers: {authorization: this._userToken,
                 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -109,13 +122,19 @@ export default class Api {
                   })
             }
         )
+        .then( res => {
+            if (res.ok) {
+              return res.json();
+            }
+            return Promise.reject(`Ошибка: ${res.status}`);
+        })
     }
 
     setAvatar(avatarLink) {
         this.handleLoadingRenedering(true, this._profileAvatarLoading);
-        return fetch( this._avatarUpdateUrl,
+        return fetch( this._baseUrl + 'users/me/avatar',
         {
-            method: this._avatarUpdateMethod,
+            method: 'PATCH',
             headers: { authorization: this._userToken, 'Content-Type': 'application/json'},
             body: JSON.stringify({ avatar: avatarLink})
         })
@@ -123,13 +142,19 @@ export default class Api {
 
     getUserInfo() {
         return fetch(
-            this._getUserInfoUrl,
+            this._baseUrl + 'users/me',
             {
-            method: this._getUserInfoMethod,
+            method: 'GET',
             headers: {
               authorization: this._userToken
             },
             }
         )
+        .then( res => {
+            if (res.ok) {
+              return res.json();
+            }
+            return Promise.reject(`Ошибка: ${res.status}`);
+        })
     } 
 }

@@ -26,37 +26,33 @@ import {
 import PopupWithImage from '../components/PopupWithImage.js';
 import PopupWithForm from '../components/PopupWithForm.js';
 
-const cardImagePopup = new PopupWithImage('#card-popup');
 
+let userId;
+const cardImagePopup = new PopupWithImage('#card-popup');
 const mestoApi = new Api(apiConfig);
+const newCard = new Section( {
+  renderer: (item) => {
+    addNewCard( item, newCard, '#elements__item-template');
+  }
+},
+  '.elements__gallery'
+);
 
 const addCardPopup = new PopupWithForm( 
   '#add-card-popup',
   (formInput) => {
     mestoApi.addCard(formInput)
-    .then( res => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
     .then( (cardData) => {
         const card = [cardData];
-        const newCard = new Section( {
-          items: card,
-          renderer: (item) => {
-            addNewCard( item, newCard, '#elements__item-template');
-          }
-        },
-          '.elements__gallery'
-        );
-        newCard.renderItems();
+        newCard.renderItems(card);
         addCardPopup.close();
     })
-    .catch( (err) => console.log('Ошибка, загрузка не удалась: '+ err) )
+    .catch( (err) => console.log('Ошибка, загрузка чего-то не удалась: '+ err) )
     .finally( () => mestoApi.handleLoadingRenedering(false, popupAddCardLoadingPlaceholder)); 
   } 
 );
+
+const deleteCardPopup = new PopupConfirmation('#delete-card-popup');
 
 function addNewCard(newCard, newSection, cardTemplateSelector) {
   const card = new Card(
@@ -66,40 +62,27 @@ function addNewCard(newCard, newSection, cardTemplateSelector) {
       cardImagePopup.open(newCard);
     },
     () => {
-      const deleteCardPopup = new PopupConfirmation(
-        '#delete-card-popup',
-        () => {
-          mestoApi.deleteCard(card._cardId)
-          .then( res => {
-            if (res.ok) {
-              return res.json();
-            }
-            return Promise.reject(`Ошибка: ${res.status}`);
-          })
-          .then( () => {
-            card.removeCardElement();
-            deleteCardPopup.close();
-          })
-          .catch( (err) => console.log('Ошибка, загрузка не удалась: '+ err) ); 
-        }  
-      );
+      deleteCardPopup.setEventListeners( () => {
+        mestoApi.deleteCard(card._cardId)
+        .then( (res) => {
+          card.removeCardElement();
+          deleteCardPopup.close();
+        })
+        .catch( (err) => console.log('Ошибка, загрузка карточки не удалась: '+ err) ); 
+        card
+      })
       deleteCardPopup.open();
-      deleteCardPopup.setEventListeners();
     },
     () => {
       const cardData = card.getCardInfo();
+      console.log(cardData);
       mestoApi.likeCard(cardData.isLiked, cardData.cardId)
-      .then( res => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(`Ошибка: ${res.status}`);
-      })
       .then( (likes) => {
         cardData.element.querySelector('.elements__like-counter').textContent = likes.likes.length;
       } )
-      .catch( (err) => console.log('Ошибка, загрузка не удалась: '+ err) );  
-    }  
+      .catch( (err) => console.log('Ошибка, загрузка лайков не удалась: '+ err) );  
+    },
+    userId
   )
   const cardElement = card.generateCard();
   newSection.addItem(cardElement);
@@ -110,22 +93,16 @@ const profile = new UserInfo( '.profile__name', '.profile__description', '.profi
 const profilePopup = new PopupWithForm(
   '#profile-popup',
   (formInput) => {
-    profile.setUserInfo(formInput);
     mestoApi.setProfileInfo(profile.getUserInfo().name, profile.getUserInfo().info)
-    .then( res => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
     .then( (profileInfo) => {
+      profile.setUserInfo(formInput);
       nameInput.value = profileInfo.name;
       proInput.value = profileInfo.about;
+      profilePopup.close();
     })
-    .catch( (err) => console.log('Ошибка, загрузка не удалась: '+ err) )
+    .catch( (err) => console.log('Ошибка, загрузка профиля не удалась: '+ err) )
     .finally( () => { 
       mestoApi.handleLoadingRenedering(false, profilePopupLoadingPlaceholder);
-      profilePopup.close();
     });
   }
 )
@@ -144,7 +121,7 @@ const editAvatarPopup = new PopupWithForm(
         profileAvatar.src = avatar.avatar;
         editAvatarPopup.close();
     })
-    .catch( (err) => console.log('Ошибка, загрузка не удалась: '+ err) )
+    .catch( (err) => console.log('Ошибка, загрузка аватара не удалась: '+ err) )
     .finally( () => mestoApi.handleLoadingRenedering(false, profileAvatarLoadingPlaceholder));
   } );
 
@@ -176,53 +153,30 @@ editAvatarPopup.setEventListeners();
 
 function getUserInfo() {
   mestoApi.getUserInfo()
-  .then( res => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
-  })
+  
   .then( (user) => {
-    console.log(user);
+      userId = user._id;
       profile.setUserInfo(user);
       profile.setUserAvatar(user);
       nameInput.value = profileName.textContent;
       proInput.value = profileBio.textContent;
   })
-  .catch( (err) => console.log('Ошибка, загрузка не удалась: '+ err) ); 
+  .catch( (err) => console.log('Ошибка, загрузка юзер инфо не удалась: '+ err) ); 
 }
-
-
-/*
-const newCard = new Section(
-  () => {
-    addNewCard( newCard.getCardData(), newCard, '#elements__item-template');
-  },
-  '.elements__gallery'
-);
-*/
 
 function getInitialCards() {
   mestoApi.getInitialCards()
-  .then( res => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
-  })
   .then( (cards) => {
-    console.log(cards);
-    const initialCardSections = new Section( {
-      items: cards,
-      renderer: (initialCard) => {
-        addNewCard( initialCard, initialCardSections, '#elements__item-template');
-      }
-    } , '.elements__gallery');
-    initialCardSections.renderItems();
+    newCard.renderItems(cards);
   } )
-  .catch( (err) => console.log('Ошибка, загрузка не удалась: '+ err) );
+  .catch( (err) => console.log('Ошибка, загрузка карточек не удалась: '+ err) );
 }
 
-Promise.all(getInitialCards(), getUserInfo())
-.then( (res) => console.log(res) )
-.catch( (err) => console.log('Ошибка, загрузка не удалась: '+ err) );
+Promise.all(getUserInfo(), getInitialCards())
+.then( (res) => {
+  console.log(res);
+ } )
+.catch( (err) => console.log('Ошибка, загрузка информации не удалась: '+ err) );
+
+export default userId;
+
