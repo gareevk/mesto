@@ -1,19 +1,29 @@
+import {
+    profilePopupSubmitButton,
+    avatarPopupSubmitButton,
+    addCardPopupSubmitButton,
+} from '../utils/constants.js';
+
 export default class Api {
     constructor( apiConfig ) {
         this._userToken = apiConfig.userToken;
 
         this._baseUrl = 'https://mesto.nomoreparties.co/v1/cohort36/';
-        
-        this._profileInfoLoading = document.querySelector('#profile-loading-placeholder');
-        this._profileAvatarLoading = document.querySelector('#avatar-loading-placeholder');
-        this._addCardLoading = document.querySelector('#add-card-loading-placeholder');
+
+        this._profilePopupSubmitButton = profilePopupSubmitButton;
+        this._avatarPopupSubmitButton = avatarPopupSubmitButton;
+        this._addCardPopupSubmitButton = addCardPopupSubmitButton;
+        this._submitButtonInitialText = '';
     }
 
-    handleLoadingRenedering(isLoading, loadingPlaceholder) {
+    handleLoadingRenedering(isLoading, submitButton) {
         if (isLoading) {
-            loadingPlaceholder.classList.add('.popup__loading-placeholder_visible');
+            //loadingPlaceholder.classList.add('.popup__loading-placeholder_visible');
+            this._submitButtonInitialText = submitButton.textContent;
+            submitButton.textContent = 'Сохранение...'
           } else {
-            loadingPlaceholder.classList.remove('.popup__loading-placeholder_visible');
+            //loadingPlaceholder.classList.remove('.popup__loading-placeholder_visible');
+            submitButton.textContent = this._submitButtonInitialText;
           }
     }
 
@@ -69,7 +79,7 @@ export default class Api {
     }
 
     setProfileInfo(name, info) {
-        this.handleLoadingRenedering(true, this._profileInfoLoading);
+        this.handleLoadingRenedering(true, this._profilePopupSubmitButton);
         return fetch(
             this._baseUrl + 'users/me',
             {
@@ -109,7 +119,7 @@ export default class Api {
     }
 
     addCard(formInput) {
-        this.handleLoadingRenedering(true, this._addCardLoading);
+        this.handleLoadingRenedering(true, this._addCardPopupSubmitButton);
         return fetch(
             this._baseUrl + 'cards',
             {
@@ -131,7 +141,7 @@ export default class Api {
     }
 
     setAvatar(avatarLink) {
-        this.handleLoadingRenedering(true, this._profileAvatarLoading);
+        this.handleLoadingRenedering(true, this._avatarPopupSubmitButton);
         return fetch( this._baseUrl + 'users/me/avatar',
         {
             method: 'PATCH',
@@ -146,7 +156,7 @@ export default class Api {
             {
             method: 'GET',
             headers: {
-              authorization: this._userToken
+              authorization: this._userToken, 'Content-Type': 'application/json'
             },
             }
         )

@@ -68,7 +68,6 @@ export default class Card {
   
     _likeHandler() {
       this._isLiked = !this._isLiked;
-      this._like();
       this._handleLikeClick();
     }
   
