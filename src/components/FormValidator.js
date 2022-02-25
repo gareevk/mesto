@@ -66,4 +66,9 @@ export default class FormValidator {
     });  
     this._setEventListeners();    
   }
+
+  disableButton(popup) {
+    popup.querySelector(this._saveButton).classList.add(this._saveButtonDisabled);
+    popup.querySelector(this._saveButton).setAttribute('disabled', true);
+  }
 }
