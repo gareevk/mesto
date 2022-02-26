@@ -162,30 +162,19 @@ cardImagePopup.setEventListeners();
 
 editAvatarPopup.setEventListeners();
 
-const getUserInfo = () => {
-  mestoApi.getUserInfo()
-  .then( (user) => {
-    userId = user._id;
-    profile.setUserInfo(user);
-    profile.setUserAvatar(user);
-  })
-  .then( () => {
-    nameInput.value = profileName.textContent;
-    proInput.value = profileBio.textContent;
-  })
-  .catch( (err) => console.log('Ошибка, загрузка юзер инфо не удалась: '+ err) ); 
-}
+const getUserInfo = mestoApi.getUserInfo();
+const getInitialCards = mestoApi.getInitialCards();
 
-const getInitialCards = () => {
-  mestoApi.getInitialCards()
-  .then( (cards) => {
-    newCard.renderItems(cards, false);
-  } )
-  .catch( (err) => console.log('Ошибка, загрузка карточек не удалась: '+ err) );
-}
-
-Promise.all( [getUserInfo()] )
-.then( () => getInitialCards() )
+Promise.all( [getUserInfo, getInitialCards] )
+.then( (res) => {
+  userId = res[0]._id;
+  profile.setUserInfo(res[0]);
+  profile.setUserAvatar(res[0]);
+  return res[1];
+} )
+.then( (cards) => {
+  newCard.renderItems(cards, false);
+})
 .catch( (err) => console.log('Ошибка, загрузка информации не удалась: '+ err) );
 
 export default userId;
